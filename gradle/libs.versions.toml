@@ -1,0 +1,8 @@
+[versions]
+guava = "31.1-jre"
+
+[libraries]
+google-guava = { module = "com.google.guava:guava", version.ref = "guava" }
+
+[bundles]
+guava = ["google-guava"]
