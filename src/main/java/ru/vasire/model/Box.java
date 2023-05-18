@@ -4,9 +4,10 @@ import ru.vasire.model.fruit.BoxedFruit;
 import ru.vasire.model.fruit.Fruit;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Box<T extends Fruit & BoxedFruit> {
-    ArrayList<T> items = new ArrayList<>();
+    private final List<T> items = new ArrayList<>();
 
     public void addFruit(T item){
         items.add(item);
@@ -29,6 +30,10 @@ public class Box<T extends Fruit & BoxedFruit> {
 
     // пересыпать фрукты из текущей коробки в другую (с такими же фруктами)
     public void pourIntoOtherBasket(Box<T> otherBox){
+        if(otherBox == null || otherBox == this){
+            return;
+        }
+
         otherBox.items.addAll(this.items);
         this.items.clear();
     }
