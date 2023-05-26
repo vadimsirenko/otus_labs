@@ -2,8 +2,6 @@ package ru.vasire;
 
 import ru.vasire.mytestengine.TestEngine;
 
-import java.lang.reflect.InvocationTargetException;
-
 /**
  *  Class for test engine TestEngine
  */

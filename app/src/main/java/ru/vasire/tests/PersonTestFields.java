@@ -1,8 +1,8 @@
 package ru.vasire.tests;
 
-import ru.vasire.annotations.After;
-import ru.vasire.annotations.Before;
-import ru.vasire.annotations.Test;
+import ru.vasire.annotation.After;
+import ru.vasire.annotation.Before;
+import ru.vasire.annotation.Test;
 import ru.vasire.model.Person;
 import ru.vasire.mytestengine.Assertions;
 

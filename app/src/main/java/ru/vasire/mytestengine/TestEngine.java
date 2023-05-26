@@ -1,16 +1,14 @@
 package ru.vasire.mytestengine;
 
-import ru.vasire.annotations.After;
-import ru.vasire.annotations.Before;
-import ru.vasire.annotations.Test;
+import ru.vasire.annotation.After;
+import ru.vasire.annotation.Before;
+import ru.vasire.annotation.Test;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-
-import static ru.vasire.mytestengine.Colors.*;
 
 /**
  * Class for execute tests with annotations After, Before and Test
@@ -109,7 +107,7 @@ public class TestEngine {
         if(e != null){
             e.printStackTrace(pw);
             String sStackTrace = sw.toString(); // stack trace as a string
-            printRed(sStackTrace);
+            Colors.printRed(sStackTrace);
         }
     }
 

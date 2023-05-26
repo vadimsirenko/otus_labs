@@ -1,11 +1,11 @@
-package ru.vasire.annotations;
+package ru.vasire.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.METHOD})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Test {
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.SOURCE)
+public @interface CustomToString {
 }
