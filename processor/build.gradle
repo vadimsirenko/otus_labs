@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+}
+
+group = 'ru.vasire'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/com.squareup/javapoet
+    implementation 'com.squareup:javapoet:1.13.0'
+
+
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation(project(":annotation"))
+    // https://mvnrepository.com/artifact/com.google.auto.service/auto-service
+    implementation 'com.google.auto.service:auto-service:1.0.1'
+    // https://mvnrepository.com/artifact/com.google.testing.compile/compile-testing
+    testImplementation 'com.google.testing.compile:compile-testing:0.21.0'
+
+    testImplementation 'junit:junit:4.13.1'
+
+}
+
+
+
+test {
+    useJUnitPlatform()
+
+    // See: https://github.com/google/compile-testing/issues/222
+    jvmArgs '--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED'
+    jvmArgs '--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED'
+    jvmArgs '--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED'
+}
