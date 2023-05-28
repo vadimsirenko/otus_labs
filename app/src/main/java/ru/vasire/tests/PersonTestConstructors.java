@@ -4,7 +4,8 @@ import ru.vasire.annotation.After;
 import ru.vasire.annotation.Before;
 import ru.vasire.annotation.Test;
 import ru.vasire.model.Person;
-import ru.vasire.mytestengine.Assertions;
+//import ru.vasire.mytestengine.Assertions;
+import static org.assertj.core.api.Assertions.*;
 
 public class PersonTestConstructors {
 
@@ -23,28 +24,28 @@ public class PersonTestConstructors {
 
     @Test
     void checkFullConstructorFirstName(){
-        Assertions.isTrue(personFullToTest.getFirstName().equals("Вася"),"Поле firstName сохраняется");
+        assertThat(personFullToTest.getFirstName()).isEqualTo("Вася");
     }
     @Test
     void checkFullConstructorLastName(){
-        Assertions.isTrue(personFullToTest.getLastName().equals("Сидоров"),"Поле lastName сохраняется");
+        assertThat(personFullToTest.getLastName()).isEqualTo("Сидоров");
     }
     @Test
     void checkFullConstructorAge(){
-        Assertions.isTrue(personFullToTest.getAge() == 45,"Поле age сохраняется");
+        assertThat(personFullToTest.getAge()).isEqualTo(45);
     }
 
     @Test
     void checkEmptyConstructorFirstName(){
-        Assertions.isTrue(personEmptyToTest.getFirstName().equals("Вася"),"Поле firstName сохраняется");
+        assertThat(personEmptyToTest.getFirstName()).isEqualTo("Вася");
     }
     @Test
     void checkEmptyConstructorLastName(){
-        Assertions.isTrue(personEmptyToTest.getLastName().equals("Сидоров"),"Поле lastName сохраняется");
+        assertThat(personEmptyToTest.getLastName()).isEqualTo("Сидоров");
     }
     @Test
     void checkEmptyConstructorAge(){
-        Assertions.isTrue(personEmptyToTest.getAge() == 45,"Поле age сохраняется");
+        assertThat(personEmptyToTest.getAge()).isEqualTo(45);
     }
 
     @After

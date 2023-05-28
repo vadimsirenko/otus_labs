@@ -4,7 +4,8 @@ import ru.vasire.annotation.After;
 import ru.vasire.annotation.Before;
 import ru.vasire.annotation.Test;
 import ru.vasire.model.Person;
-import ru.vasire.mytestengine.Assertions;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PersonTestFields {
     Person personToTest;
@@ -17,17 +18,17 @@ public class PersonTestFields {
     @Test
     void checkSetFirstName(){
         personToTest.setFirstName("Вася");
-        Assertions.isTrue(personToTest.getFirstName().equals("Вася"),"Поле firstName сохраняется");
+        assertThat(personToTest.getFirstName()).isEqualTo("Вася");
     }
     @Test
     void checkSetLastName(){
         personToTest.setLastName("Сидоров");
-        Assertions.isTrue(personToTest.getLastName().equals("Сидоров"),"Поле lastName сохраняется");
+        assertThat(personToTest.getLastName()).isEqualTo("Сидоров");
     }
     @Test
     void checkSetAge(){
         personToTest.setAge(45);
-        Assertions.isTrue(personToTest.getAge() == 45,"Поле age сохраняется");
+        assertThat(personToTest.getAge()).isEqualTo(45);
     }
 
     @After

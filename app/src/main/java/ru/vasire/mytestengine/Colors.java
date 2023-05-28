@@ -6,7 +6,7 @@ public class Colors {
     public static final String ANSI_GREEN = "\u001B[32m";
 
     public static void printRed(String message){
-        System.out.println(ANSI_RED + message + ": PASSED!" +  ANSI_RESET);
+        System.out.println(ANSI_RED + message + ": FAILED!" +  ANSI_RESET);
     }
 
     public static void printGreen(String message){
