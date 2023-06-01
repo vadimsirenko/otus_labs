@@ -1,0 +1,76 @@
+# Init statistic
+
+<table>
+    <tr>
+        <th>ms</th>
+        <th>mx</th>
+        <th>spend msec</th>
+        <th>sec</th>
+    </tr>
+    <tr>
+        <td>256</td>
+        <td>256</td>
+        <td>14180</td>
+        <td>14</td>
+    </tr>   
+    <tr>
+        <td>256</td>
+        <td>512</td>
+        <td>11004</td>
+        <td>11</td>
+    </tr>  
+    <tr>
+        <td>512</td>
+        <td>512</td>
+        <td>10412</td>
+        <td>10</td>
+    </tr> 
+    <tr>
+        <td>256</td>
+        <td>1024</td>
+        <td>10537</td>
+        <td>10</td>
+    </tr> 
+    <tr>
+        <td>1024</td>
+        <td>1024</td>
+        <td>9751</td>
+        <td>9</td>
+    </tr> 
+    <tr>
+        <td>256</td>
+        <td>2048</td>
+        <td>9982</td>
+        <td>9</td>
+    </tr>
+    <tr>
+        <td>2048</td>
+        <td>2048</td>
+        <td style="color: red;font-weight: bold">9364</td>
+        <td>9</td>
+    </tr> 
+    <tr>
+        <td>256</td>
+        <td>4096</td>
+        <td>9919</td>
+        <td>9</td>
+    </tr> 
+    <tr>
+        <td>4096</td>
+        <td>4096</td>
+        <td>9670</td>
+        <td>9</td>
+    </tr> 
+    <tr>
+        <td>256</td>
+        <td>8192</td>
+        <td>9679</td>
+        <td>9</td>
+    </tr>
+    <tr>
+        <td>8192</td>
+        <td>8192</td>
+        <td>10228</td>
+        <td>10</td>
+    </tr> 
+</table>
