@@ -74,3 +74,104 @@
         <td>10</td>
     </tr> 
 </table>
+
+# After optimization statistic
+
+<table>
+    <tr>
+        <th>ms</th>
+        <th>mx</th>
+        <th>spend msec</th>
+        <th>sec</th>
+    </tr>
+    <tr>
+        <td>256</td>
+        <td>256</td>
+        <td>696</td>
+        <td>0</td>
+    </tr>   
+    <tr>
+        <td>256</td>
+        <td>512</td>
+        <td>687</td>
+        <td>0</td>
+    </tr>  
+    <tr>
+        <td>512</td>
+        <td>512</td>
+        <td>692</td>
+        <td>0</td>
+    </tr> 
+    <tr>
+        <td>256</td>
+        <td>1024</td>
+        <td>742</td>
+        <td>0</td>
+    </tr> 
+    <tr>
+        <td>1024</td>
+        <td>1024</td>
+        <td>719</td>
+        <td>0</td>
+    </tr> 
+    <tr>
+        <td>256</td>
+        <td>2048</td>
+        <td>701</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>2048</td>
+        <td>2048</td>
+        <td>696</td>
+        <td>0</td>
+    </tr> 
+    <tr>
+        <td>256</td>
+        <td>4096</td>
+        <td>697</td>
+        <td>0</td>
+    </tr> 
+    <tr>
+        <td>4096</td>
+        <td>4096</td>
+        <td>695</td>
+        <td>0</td>
+    </tr> 
+    <tr>
+        <td>256</td>
+        <td>8192</td>
+        <td>695</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>8192</td>
+        <td>8192</td>
+        <td>694</td>
+        <td>0</td>
+    </tr> 
+    <tr>
+        <td>256</td>
+        <td>16384</td>
+        <td>691</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>16384</td>
+        <td>16384</td>
+        <td style="color: red;font-weight: bold">689</td>
+        <td>0</td>
+    </tr> 
+    <tr>
+        <td>256</td>
+        <td>32768</td>
+        <td>750</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>32768</td>
+        <td>32768</td>
+        <td>728</td>
+        <td>0</td>
+    </tr> 
+</table>
