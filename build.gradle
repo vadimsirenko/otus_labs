@@ -1,0 +1,40 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: "java"
+
+group = 'ru.vasire'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.ow2.asm:asm-commons:9.5'
+
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task loggerDemoJar(type: ShadowJar) {
+    archiveClassifier.set("")
+    archiveBaseName.set("loggerDemo")
+    archiveVersion.set("")
+    manifest {
+        attributes (
+                'Main-Class': 'ru.vasire.LoggerDemo',
+                'Premain-Class': 'ru.vasire.logger.Agent'
+        )
+    }
+    from sourceSets.main.output
+    configurations = [project.configurations.runtimeClasspath]
+}
