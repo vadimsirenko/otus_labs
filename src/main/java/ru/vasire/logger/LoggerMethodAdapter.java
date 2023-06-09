@@ -18,6 +18,8 @@ public class LoggerMethodAdapter extends AdviceAdapter {
     List<Type> paramTypes;
     boolean isStatic;
 
+    public interface PutToStackValue { void apply(); }
+
     /**
      * Constructs a new {@link AdviceAdapter}.
      *
@@ -48,7 +50,7 @@ public class LoggerMethodAdapter extends AdviceAdapter {
             var t = getArgumentTypes();
            paramTypes = Arrays.stream(getArgumentTypes()).toList();
             try {
-                trace("enter");
+                trace();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -61,59 +63,70 @@ public class LoggerMethodAdapter extends AdviceAdapter {
         super.visitParameter(name, access);
     }
 
-    private void trace(String action) throws ClassNotFoundException {
+    private void trace() throws ClassNotFoundException {
         mv.visitCode();
-        mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-        mv.visitLdcInsn("executed method: " + name );
-        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "print", "(Ljava/lang/String;)V", false);
-
-        int offset = (isStatic)? 0 : 1;
+        visitPrint("executed method: " + name);
         for (int i = 0; i < paramTypes.size(); i++) {
 
             if(i>0) {
-                mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-                mv.visitLdcInsn(", ");
-                mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "print", "(Ljava/lang/String;)V", false);
+              //  visitPrint(", ");
             } else{
-                mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-                mv.visitLdcInsn(" parameters" + Arrays.toString(paramTypes.stream().map(t->t.getClassName()).toArray())+": ");
-                mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "print", "(Ljava/lang/String;)V", false);
+              //  visitPrint(" parameters" + Arrays.toString(paramTypes.stream().map(Type::getClassName).toArray())+": ");
             }
-            String desc = "(" + paramTypes.get(i).toString() + ")V";
-            desc = getDescription(paramTypes.get(i));
-            mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-            mv.visitVarInsn(getReturnOpcode(paramTypes.get(i)), i+offset);
-            mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "print", desc, false);
+            visitPrint(i);
         }
-        mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", "println", "()V", false);
+        visitPrintln();
         mv.visitEnd();
     }
+
+    private void visitPrint(int numInStack) {
+        int offset = (isStatic)? 0 : 1;
+        String descriptor = getDescriptor(paramTypes.get(numInStack));
+        visitPrintFn("print", descriptor,
+                ()->mv.visitVarInsn(getReturnOpcode(paramTypes.get(numInStack)), numInStack + offset));
+    }
+
+    private void visitPrint(String message) {
+        visitPrintFn("print", "(Ljava/lang/String;)V", ()->mv.visitLdcInsn(message));
+    }
+
+    private void visitPrintln() {
+        visitPrintFn("println", "()V", ()->{});
+    }
+
+    private void visitPrintFn(String printMethod, String descriptor, PutToStackValue putToStackValue) {
+        mv.visitFieldInsn(Opcodes.GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+        putToStackValue.apply();
+        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "java/io/PrintStream", printMethod, descriptor, false);
+    }
+
 
     public static int getReturnOpcode(Type type) {
         if (type != null) {
             if(type.getClassName().equals("java.lang.String"))
                 return Opcodes.ALOAD;
             switch (type.getSort()) {
-                case Type.VOID:
+                case Type.VOID -> {
                     System.out.println("type can't be void");
                     return -1;
-                case Type.BOOLEAN:
-                case Type.CHAR:
-                case Type.BYTE:
-                case Type.SHORT:
-                case Type.INT:
+                }
+                case Type.BOOLEAN, Type.CHAR, Type.BYTE, Type.SHORT, Type.INT -> {
                     return Opcodes.ILOAD;
-                case Type.FLOAT:
+                }
+                case Type.FLOAT -> {
                     return Opcodes.FLOAD;
-                case Type.LONG:
+                }
+                case Type.LONG -> {
                     return Opcodes.LLOAD;
-                case Type.DOUBLE:
+                }
+                case Type.DOUBLE -> {
                     return Opcodes.DLOAD;
-                default:
+                }
+                default -> {
                     // Type.ARRAY:
                     // Type.OBJECT:
                     return Opcodes.ALOAD;
+                }
             }
         } else {
             System.out.println("type is null!");
@@ -121,27 +134,23 @@ public class LoggerMethodAdapter extends AdviceAdapter {
         }
     }
 
-    public static String getDescription(Type type) {
+    public static String getDescriptor(Type type) {
         if (type != null) {
             if(type.getClassName().equals("java.lang.String"))
                 return "(Ljava/lang/Object;)V";
             switch (type.getSort()) {
-                case Type.VOID:
+                case Type.VOID -> {
                     System.out.println("type can't be void");
                     return "()V";
-                case Type.BOOLEAN:
-                case Type.CHAR:
-                case Type.BYTE:
-                case Type.SHORT:
-                case Type.INT:
-                case Type.FLOAT:
-                case Type.LONG:
-                case Type.DOUBLE:
+                }
+                case Type.BOOLEAN, Type.CHAR, Type.BYTE, Type.SHORT, Type.INT, Type.FLOAT, Type.LONG, Type.DOUBLE -> {
                     return "(" + type + ")V";
-                default:
+                }
+                default -> {
                     // Type.ARRAY:
                     // Type.OBJECT:
                     return "(Ljava/lang/Object;)V";
+                }
             }
         } else {
             System.out.println("type is null!");

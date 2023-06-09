@@ -1,8 +1,5 @@
 package ru.vasire.logger;
 
-
-import ru.vasire.model.Person;
-
 import java.lang.reflect.Method;
 
 public class MainForDebug {
