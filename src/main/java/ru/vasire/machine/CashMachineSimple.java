@@ -37,7 +37,7 @@ public class CashMachineSimple implements CashMachine {
      * @return balance of funds
      */
     @Override
-    public int checkBalance() {
+    public int getBalance() {
         return moneyCells.values().stream().mapToInt(BanknoteCell::getBalance).sum();
     }
 

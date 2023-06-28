@@ -9,7 +9,7 @@ public interface CashMachine {
      *
      * @return balance of funds
      */
-    int checkBalance();
+    int getBalance();
 
     /**
      * Cash withdrawal. Issues the requested amount with the minimum number of banknotes or an error if the amount cannot be issued

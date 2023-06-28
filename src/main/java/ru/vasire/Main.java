@@ -18,20 +18,20 @@ public class Main {
                 new BanknoteCell(Banknote.N1000, 5),
                 new BanknoteCell(Banknote.N5000, 5));
 
-        int initialBalance = cashMachine.checkBalance();
+        int initialBalance = cashMachine.getBalance();
         System.out.println("Initial sum " + initialBalance);
 
         List<Banknote> takeMoney = cashMachine.getMoney(6600);
         System.out.println("Taken notes 6600" + takeMoney);
 
-        initialBalance = cashMachine.checkBalance();
+        initialBalance = cashMachine.getBalance();
         System.out.println("New sum " + initialBalance);
 
         System.out.println("Put sum " + 6600);
         Banknote[] money = new Banknote[]{Banknote.N100, Banknote.N500, Banknote.N1000, Banknote.N5000};
         cashMachine.putMoney(List.of(money));
-        System.out.println("Accept sum " + (cashMachine.checkBalance() - initialBalance));
-        initialBalance = cashMachine.checkBalance();
+        System.out.println("Accept sum " + (cashMachine.getBalance() - initialBalance));
+        initialBalance = cashMachine.getBalance();
         System.out.println("New sum " + initialBalance);
 
         System.out.println("");

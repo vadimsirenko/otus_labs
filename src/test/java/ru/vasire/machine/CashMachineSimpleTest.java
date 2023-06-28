@@ -26,18 +26,18 @@ class CashMachineSimpleTest {
 
         List<Banknote> expectedList = List.of(Banknote.N100, Banknote.N500, Banknote.N1000, Banknote.N5000);
         int moneyToGet = 100 + 500 + 1000 + 5000;
-        int initSum = cashMachine.checkBalance();
+        int initSum = cashMachine.getBalance();
 
         List<Banknote> testList = cashMachine.getMoney(moneyToGet);
         assertEquals(moneyToGet, Banknote.getAmountOfBanknotes(testList));
         assertEquals(expectedList.size(), testList.size());
-        assertEquals(cashMachine.checkBalance(), initSum - Banknote.getAmountOfBanknotes(testList));
+        assertEquals(cashMachine.getBalance(), initSum - Banknote.getAmountOfBanknotes(testList));
     }
 
     @Test
     void getMoneyWhenMoneyNotEnoughRaiseException() {
 
-        int initSum = cashMachine.checkBalance();
+        int initSum = cashMachine.getBalance();
         int moneyToGet = 50_000;
 
         InsufficientFundsException exception = assertThrows(InsufficientFundsException.class, () -> {
@@ -47,17 +47,17 @@ class CashMachineSimpleTest {
         assertEquals("Unable to withdraw the specified amount", exception.getMessage());
 
         // The amount in the ATM should not change
-        assertEquals(initSum, cashMachine.checkBalance());
+        assertEquals(initSum, cashMachine.getBalance());
     }
 
     @Test
     void putMoney() {
         List<Banknote> putBanknotes = List.of(Banknote.N100, Banknote.N500, Banknote.N1000, Banknote.N5000);
-        int initSum = cashMachine.checkBalance();
+        int initSum = cashMachine.getBalance();
         int expectedMoney = 100 + 500 + 1000 + 5000;
 
         cashMachine.putMoney(putBanknotes);
-        assertEquals(initSum + Banknote.getAmountOfBanknotes(putBanknotes), cashMachine.checkBalance());
+        assertEquals(initSum + Banknote.getAmountOfBanknotes(putBanknotes), cashMachine.getBalance());
     }
 
     @Test
@@ -68,7 +68,7 @@ class CashMachineSimpleTest {
                 new BanknoteCell(Banknote.N5000, 5));
 
         List<Banknote> putBanknotes = List.of(Banknote.N100, Banknote.N500, Banknote.N1000, Banknote.N5000);
-        int initSum = cashMachine.checkBalance();
+        int initSum = cashMachine.getBalance();
 
         AcceptingFundsException exception = assertThrows(AcceptingFundsException.class, () -> {
             cashMachine.putMoney(putBanknotes);
@@ -77,13 +77,13 @@ class CashMachineSimpleTest {
         assertEquals("Unable to accept banknote N500", exception.getMessage());
 
         // The amount in the ATM should not change
-        assertEquals(initSum, cashMachine.checkBalance());
+        assertEquals(initSum, cashMachine.getBalance());
     }
 
     @Test
     void checkBalance() {
         int expectedSum = 33_000;
-        assertEquals(expectedSum, cashMachine.checkBalance());
+        assertEquals(expectedSum, cashMachine.getBalance());
     }
 
 }
