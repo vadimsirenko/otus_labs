@@ -2,26 +2,32 @@ package ru.vasire.machine;
 
 import lombok.NonNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
-/**
- * Simplified ATM
- */
+
 public class CashMachineSimple implements CashMachine {
-    private final SortedMap<Banknote, MoneyCell> moneyCells;
+    private final SortedMap<Banknote, BanknoteCell> moneyCells;
 
     /**
      * Simplified ATM
      *
      * @param cells Cells with banknotes. Cell values must be unique.
      */
-    public CashMachineSimple(@NonNull MoneyCell... cells) {
-        this.moneyCells = new TreeMap<>(Collections.reverseOrder(new Banknote.BanknoteComparator()));
-        for (MoneyCell moneyCell : cells) {
-            if (this.moneyCells.containsKey(moneyCell.getBanknote())) {
+    public CashMachineSimple(@NonNull BanknoteCell... cells) {
+        moneyCells = new TreeMap<>(Collections.reverseOrder(new Banknote.BanknoteComparator()));
+        for (BanknoteCell banknoteCell : cells) {
+            if (moneyCells.containsKey(banknoteCell.getBanknote())) {
                 throw new IllegalArgumentException("There can be only one cell with each denomination");
             }
-            this.moneyCells.put(moneyCell.getBanknote(), moneyCell);
+            moneyCells.put(banknoteCell.getBanknote(), banknoteCell);
         }
     }
 
@@ -32,7 +38,7 @@ public class CashMachineSimple implements CashMachine {
      */
     @Override
     public int checkBalance() {
-        return moneyCells.values().stream().mapToInt(MoneyCell::getBalance).sum();
+        return moneyCells.values().stream().mapToInt(BanknoteCell::getBalance).sum();
     }
 
     /**
@@ -43,42 +49,61 @@ public class CashMachineSimple implements CashMachine {
      * @throws InsufficientFundsException error if the amount cannot be issued
      */
     @Override
-    public List<Banknote> getMoney(int requereSum) throws InsufficientFundsException {
-        if (requereSum < 0) {
-            throw new InsufficientFundsException("The requested amount cannot be negative");
+    public List<Banknote> getMoney(int requereSum) {
+        if (requereSum <= 0) {
+            throw new InsufficientFundsException("Requested amount must be greater than zero");
         }
+        List<Banknote> money = calculationBanknoteSet(requereSum);
+        Map<Banknote, Integer> changeList = BanknoteListToBanknoteMap(money);
+        for (Banknote banknote : changeList.keySet()) {
+            moneyCells.get(banknote).getBanknotes(changeList.get(banknote));
+        }
+        return money;
+    }
+
+    private List<Banknote> calculationBanknoteSet(int sumToGetFromBanknoteCell) {
         List<Banknote> money = new ArrayList<>();
-        for (MoneyCell moneyCell : moneyCells.values()) {
-            money.addAll(moneyCell.getPossible(requereSum - Banknote.getBanknoteSum(money)));
-            if (Banknote.getBanknoteSum(money) == requereSum)
-                return money;
+        for (BanknoteCell banknoteCell : moneyCells.values()) {
+            int banknoteCount = Math.min(banknoteCell.getBanknote().MaxBanknoteCountLessOrEqToSum(sumToGetFromBanknoteCell), banknoteCell.getBanknoteCount());
+            if (banknoteCount > 0) {
+                money.addAll(Collections.nCopies(banknoteCount, banknoteCell.getBanknote()));
+                sumToGetFromBanknoteCell = sumToGetFromBanknoteCell - banknoteCell.getBanknote().getAmountOfNumberBanknote(banknoteCount);
+                if (sumToGetFromBanknoteCell == 0)
+                    break;
+            }
         }
-        // TODO: Must be implemented by rolling back the transaction
-        try {
-            putMoney(money.toArray(Banknote[]::new));
-        } catch (AcceptingFundsException e) {
-            throw new RuntimeException(e);
+        if (sumToGetFromBanknoteCell != 0) {
+            throw new InsufficientFundsException("Unable to withdraw the specified amount");
         }
-        throw new InsufficientFundsException("Unable to withdraw the specified amount");
+        return money;
     }
 
     /**
      * Accept banknotes of different denominations (each denomination must have its own cell)
      *
      * @param banknotes banknotes of different denominations
-     * @return Funds accepted
      * @throws AcceptingFundsException Banknote acceptance error
      */
     @Override
-    public int putMoney(@NonNull Banknote... banknotes) throws AcceptingFundsException {
-        for (Banknote banknote : banknotes) {
-            if (!moneyCells.containsKey(banknote)) {
-                throw new AcceptingFundsException("Unable to accept banknote " + banknote);
-            }
+    public void putMoney(@NonNull List<Banknote> banknotes) {
+        Map<Banknote, Integer> banknoteSet = BanknoteListToBanknoteMap(banknotes);
+        checkAcceptedBanknotes(banknoteSet);
+        for (Banknote banknote : banknoteSet.keySet()) {
+            moneyCells.get(banknote).putBanknotes(banknoteSet.get(banknote));
         }
-        for (Banknote banknote : banknotes) {
-            moneyCells.get(banknote).putOne();
+    }
+
+    private void checkAcceptedBanknotes(Map<Banknote, Integer> banknoteSet) {
+        Optional<Banknote> unsupportedBanknote = banknoteSet.keySet().stream().filter(b -> !moneyCells.containsKey(b)).findAny();
+
+        if (unsupportedBanknote.isPresent()) {
+            throw new AcceptingFundsException("Unable to accept banknote " + unsupportedBanknote.get());
         }
-        return Banknote.getBanknoteSum(banknotes);
+    }
+
+    private Map<Banknote, Integer> BanknoteListToBanknoteMap(List<Banknote> banknotes) {
+        Map<Banknote, Integer> banknoteSet = new HashMap<Banknote, Integer>();
+        banknoteSet.putAll(banknotes.stream().collect(Collectors.toMap(banknote -> banknote, banknote -> 1, Integer::sum)));
+        return banknoteSet;
     }
 }

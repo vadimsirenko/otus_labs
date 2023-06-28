@@ -1,6 +1,5 @@
 package ru.vasire.machine;
 
-import java.util.Arrays;
 import java.util.List;
 
 public enum Banknote {
@@ -25,20 +24,10 @@ public enum Banknote {
     /**
      * Returns the amount of banknotes
      *
-     * @param banknotes banknote set
-     * @return amount of banknotes
-     */
-    public static int getBanknoteSum(Banknote... banknotes) {
-        return getBanknoteSum(Arrays.stream(banknotes).toList());
-    }
-
-    /**
-     * Returns the amount of banknotes
-     *
      * @param banknoteList banknote set
      * @return amount of banknotes
      */
-    public static int getBanknoteSum(List<Banknote> banknoteList) {
+    public static int getAmountOfBanknotes(List<Banknote> banknoteList) {
         return banknoteList.stream().mapToInt(b -> b.denomination).sum();
     }
 
@@ -48,7 +37,7 @@ public enum Banknote {
      * @param banknoteNum number of banknotes
      * @return amount of banknotes
      */
-    public int getSumOfNumberBanknote(int banknoteNum) {
+    public int getAmountOfNumberBanknote(int banknoteNum) {
         return this.denomination * banknoteNum;
     }
 

@@ -1,9 +1,6 @@
 package ru.vasire.machine;
 
-/**
- * Error in accepting funds
- */
-public class AcceptingFundsException extends Exception {
+public class AcceptingFundsException extends RuntimeException {
     public AcceptingFundsException(String message) {
         super(message);
     }
