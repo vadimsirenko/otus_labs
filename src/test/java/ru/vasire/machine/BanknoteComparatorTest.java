@@ -23,7 +23,7 @@ public class BanknoteComparatorTest {
 
     @Test
     void checkSortAsc() {
-        banknotes.sort(new Banknote.BanknoteComparator());
+        banknotes.sort(null);
         assertEquals(banknotes.get(0), Banknote.N100);
         assertEquals(banknotes.get(1), Banknote.N500);
         assertEquals(banknotes.get(2), Banknote.N1000);
@@ -32,7 +32,7 @@ public class BanknoteComparatorTest {
 
     @Test
     void checkSortDesc() {
-        banknotes.sort(Collections.reverseOrder(new Banknote.BanknoteComparator()));
+        banknotes.sort(Collections.reverseOrder());
         assertEquals(banknotes.get(3), Banknote.N100);
         assertEquals(banknotes.get(2), Banknote.N500);
         assertEquals(banknotes.get(1), Banknote.N1000);

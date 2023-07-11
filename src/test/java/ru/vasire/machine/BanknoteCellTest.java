@@ -30,7 +30,7 @@ class BanknoteCellTest {
     void requestForBanknotesMoreThanTheBalance() {
         int banknoteCountForRequest = banknoteCell.getBanknoteCount() + 1;
         InsufficientFundsException exception = assertThrows(InsufficientFundsException.class, () -> {
-            banknoteCell.getBanknotes(banknoteCountForRequest);
+            banknoteCell.removeBanknotes(banknoteCountForRequest);
         });
 
         assertEquals("The requested number of banknotes is greater than the balance", exception.getMessage());
@@ -40,7 +40,7 @@ class BanknoteCellTest {
     void putBanknotes() {
         int initBalance = banknoteCell.getBalance();
         int expectedDiff = 5 * 100;
-        banknoteCell.putBanknotes(5);
+        banknoteCell.addBanknotes(5);
         assertEquals(expectedDiff, banknoteCell.getBalance() - initBalance);
     }
 }

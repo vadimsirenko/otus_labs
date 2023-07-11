@@ -2,7 +2,7 @@ package ru.vasire.machine;
 
 import java.util.List;
 
-public enum Banknote {
+public enum Banknote implements Comparable<Banknote> {
     N100(100),
     N500(500),
     N1000(1000),
@@ -49,15 +49,5 @@ public enum Banknote {
      */
     public int MaxBanknoteCountLessOrEqToSum(int sum) {
         return sum / this.denomination;
-    }
-
-    /**
-     * The function of comparing banknotes by face value
-     */
-    public static class BanknoteComparator implements java.util.Comparator<Banknote> {
-        @Override
-        public int compare(Banknote a, Banknote b) {
-            return Integer.compare(a.denomination, b.denomination);
-        }
     }
 }

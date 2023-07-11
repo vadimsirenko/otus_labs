@@ -7,16 +7,18 @@ import ru.vasire.machine.CashMachine;
 import ru.vasire.machine.CashMachineSimple;
 import ru.vasire.machine.InsufficientFundsException;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) throws InsufficientFundsException, AcceptingFundsException {
         CashMachine cashMachine = new CashMachineSimple(
-                new BanknoteCell(Banknote.N100, 5),
-                new BanknoteCell(Banknote.N500, 5),
-                new BanknoteCell(Banknote.N1000, 5),
-                new BanknoteCell(Banknote.N5000, 5));
+                Arrays.asList(
+                        new BanknoteCell(Banknote.N100, 5),
+                        new BanknoteCell(Banknote.N500, 5),
+                        new BanknoteCell(Banknote.N1000, 5),
+                        new BanknoteCell(Banknote.N5000, 5)));
 
         int initialBalance = cashMachine.getBalance();
         System.out.println("Initial sum " + initialBalance);

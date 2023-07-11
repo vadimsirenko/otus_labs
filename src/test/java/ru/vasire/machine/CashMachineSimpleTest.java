@@ -3,6 +3,7 @@ package ru.vasire.machine;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,11 +15,11 @@ class CashMachineSimpleTest {
     @BeforeEach
     void init() {
 
-        cashMachine = new CashMachineSimple(
+        cashMachine = new CashMachineSimple(Arrays.asList(
                 new BanknoteCell(Banknote.N100, 5),
                 new BanknoteCell(Banknote.N500, 5),
                 new BanknoteCell(Banknote.N1000, 5),
-                new BanknoteCell(Banknote.N5000, 5));
+                new BanknoteCell(Banknote.N5000, 5)));
     }
 
     @Test
@@ -62,10 +63,10 @@ class CashMachineSimpleTest {
 
     @Test
     void putMoneyWithAcceptingFundsException() {
-        cashMachine = new CashMachineSimple(
+        cashMachine = new CashMachineSimple(Arrays.asList(
                 new BanknoteCell(Banknote.N100, 5),
                 new BanknoteCell(Banknote.N1000, 5),
-                new BanknoteCell(Banknote.N5000, 5));
+                new BanknoteCell(Banknote.N5000, 5)));
 
         List<Banknote> putBanknotes = List.of(Banknote.N100, Banknote.N500, Banknote.N1000, Banknote.N5000);
         int initSum = cashMachine.getBalance();
@@ -74,7 +75,7 @@ class CashMachineSimpleTest {
             cashMachine.putMoney(putBanknotes);
         });
 
-        assertEquals("Unable to accept banknote N500", exception.getMessage());
+        assertEquals("Unable to accept banknote", exception.getMessage());
 
         // The amount in the ATM should not change
         assertEquals(initSum, cashMachine.getBalance());
