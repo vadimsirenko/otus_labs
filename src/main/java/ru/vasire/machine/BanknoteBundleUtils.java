@@ -29,9 +29,10 @@ public class BanknoteBundleUtils {
             if (banknoteCount > 0) {
                 money.addAll(Collections.nCopies(banknoteCount, banknoteCell.getBanknote()));
                 sumToGetFromBanknoteCell = sumToGetFromBanknoteCell - banknoteCell.getBanknote().getAmountOfNumberBanknote(banknoteCount);
-                if (sumToGetFromBanknoteCell == 0)
-                    break;
+
             }
+            if (sumToGetFromBanknoteCell == 0)
+                break;
         }
         if (sumToGetFromBanknoteCell != 0) {
             return Optional.empty();
