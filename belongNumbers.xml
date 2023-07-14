@@ -1,0 +1,44 @@
+<BelongNumbers>
+  <item>
+    <belong_number>+79215553267</belong_number>
+    <messages>
+      <message>
+        <chat_identifier>Apple</chat_identifier>
+        <lasts>
+          <last>Saint-Petersburg</last>
+        </lasts>
+        <send_date>03-31-2023 14:53:34</send_date>
+        <text>PROBLEM WARNING - No more free space on the disc</text>
+      </message>
+      <message>
+        <chat_identifier>Apple</chat_identifier>
+        <lasts>
+          <last>Saint-Petersburg</last>
+        </lasts>
+        <send_date>03-31-2023 15:09:15</send_date>
+        <text>PROBLEM CRITICAL - The weather is not good for today</text>
+      </message>
+    </messages>
+  </item>
+  <item>
+    <belong_number>+79219213267</belong_number>
+    <messages>
+      <message>
+        <chat_identifier>Apple</chat_identifier>
+        <lasts>
+          <last>Saint-Petersburg</last>
+        </lasts>
+        <send_date>03-31-2023 14:09:19</send_date>
+        <text>PROBLEM CRITICAL - There is hight price of the order</text>
+      </message>
+      <message>
+        <chat_identifier>Apple</chat_identifier>
+        <lasts>
+          <last>Saint-Petersburg</last>
+        </lasts>
+        <send_date>03-31-2023 15:53:28</send_date>
+        <text>PROBLEM WARNING - It's raining like dogs and cats</text>
+      </message>
+    </messages>
+  </item>
+</BelongNumbers>
