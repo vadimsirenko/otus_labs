@@ -2,13 +2,13 @@ package ru.vasire.composite;
 
 import java.util.List;
 
-public class File implements FileItem {
+public class FileObj implements FileItem {
 
     protected Directory parent;
     private final String name;
     private final int size;
 
-    public File(String name, int size, Directory parent) {
+    public FileObj(String name, int size, Directory parent) {
         this.name = name;
         this.size = size;
         parent.addChild(this);

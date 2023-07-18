@@ -13,9 +13,7 @@ public class Directory implements FileItem {
 
     public Directory(String name, Directory parent) {
         this.name = name;
-        if (parent != null) {
-            parent.addChild(this);
-        }
+        if (parent != null) parent.addChild(this);
     }
 
     @Override
@@ -49,6 +47,8 @@ public class Directory implements FileItem {
     }
 
     public void addChild(FileItem fileItem) {
+        if(fileItem==null)
+            return;
         fileItem.setParent(this);
         if (!this.childs.contains(fileItem)) {
             this.childs.add(fileItem);
