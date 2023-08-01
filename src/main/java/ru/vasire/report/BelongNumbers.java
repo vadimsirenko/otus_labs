@@ -1,5 +1,8 @@
 package ru.vasire.report;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import lombok.ToString;
 import ru.vasire.sms.ChatSession;
 import ru.vasire.sms.Member;
 import ru.vasire.sms.Message;
@@ -10,7 +13,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 
-
+@JacksonXmlRootElement(localName = "belongNumbers")
 public class BelongNumbers extends HashSet<BelongNumber> implements Serializable {
     public static BelongNumbers SmsToBelongNumbers(Sms sms) {
         BelongNumbers belongNumbers = new BelongNumbers();

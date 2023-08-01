@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -22,15 +23,15 @@ public class BelongNumber implements Comparable<BelongNumber>, Serializable {
     private BelongNumberMessages belongNumberMessages = new BelongNumberMessages();
 
     @Override
-    public String toString() {
-        return "BelongNumber = {" +
-                "belongNumber=" + belongNumber +
-                ", belongNumberMessages=" + Arrays.toString(belongNumberMessages.toArray()) +
-                '}';
+    public int compareTo(BelongNumber o) {
+        return belongNumber.compareTo(o.belongNumber);
     }
 
     @Override
-    public int compareTo(BelongNumber o) {
-        return belongNumber.compareTo(o.belongNumber);
+    public String toString() {
+        return "BelongNumber{" +
+                "belongNumber='" + belongNumber + '\'' +
+                ", belongNumberMessages=" + belongNumberMessages +
+                '}';
     }
 }

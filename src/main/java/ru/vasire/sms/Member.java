@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.ToString;
 
-@ToString
 @Getter
 public class Member {
     @JsonProperty("first")
@@ -24,4 +23,17 @@ public class Member {
     @JsonProperty("thumb_path")
     private String thumb_path;
 
+    @Override
+    public String toString() {
+        return "Member{" +
+                "first='" + first + '\'' +
+                ", handleId=" + handleId +
+                ", imagePath='" + imagePath + '\'' +
+                ", last='" + last + '\'' +
+                ", middle='" + middle + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", service='" + service + '\'' +
+                ", thumb_path='" + thumb_path + '\'' +
+                '}';
+    }
 }

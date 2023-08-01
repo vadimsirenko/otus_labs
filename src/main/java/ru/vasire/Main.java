@@ -9,6 +9,7 @@ import ru.vasire.sms.Sms;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,48 +19,68 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class Main {
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-        Sms sms;
+    public static void main(String[] args) {
+        Sms sms = loadSmsFromFile(Main.class.getResource("/sms.json").getPath());
 
-        try (BufferedReader br = new BufferedReader(new FileReader(Main.class.getResource("/sms.json").getPath(), StandardCharsets.UTF_8))) {
+        BelongNumbers belongNumbers = BelongNumbers.SmsToBelongNumbers(sms);
+
+        testSerialization("JSON", new ObjectMapper(), "belongNumbers.json", belongNumbers);
+
+        testSerialization("XML", new XmlMapper(), "belongNumbers.xml", belongNumbers);
+
+        testSerialization("Yaml", new ObjectMapper(new YAMLFactory()), "belongNumbers.yaml", belongNumbers);
+
+        testJavaSerialization(belongNumbers, "belongNumbers.bin");
+
+        testRecoveryFromJavaSerialization("belongNumbers.bin");
+    }
+
+    private static void testJavaSerialization(BelongNumbers belongNumbers, String path) {
+        System.out.println(" ************ Java Serialization ****************** ");
+        try (FileOutputStream fileOutputStream = new FileOutputStream(path);
+             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);) {
+            objectOutputStream.writeObject(belongNumbers);
+            objectOutputStream.flush();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void testRecoveryFromJavaSerialization(String path) {
+        System.out.println("After recovery from file");
+        try (FileInputStream fileInputStream = new FileInputStream(path);
+             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);) {
+            BelongNumbers persListNew = (BelongNumbers) objectInputStream.readObject();
+            System.out.println("belongNumbersNew = " + persListNew);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static Sms loadSmsFromFile(String path) {
+        Sms sms;
+        try (BufferedReader br = new BufferedReader(new FileReader(path, StandardCharsets.UTF_8))) {
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
-
             ObjectMapper om = new ObjectMapper();
             sms = om.readValue(sb.toString(), Sms.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        BelongNumbers belongNumbers = BelongNumbers.SmsToBelongNumbers(sms);
-
-        System.out.println(" ************ JSON ****************** ");
-        ObjectMapper objectMapper = new ObjectMapper();
-        testSerialization(objectMapper, "belongNumbers.json", belongNumbers);
-
-        System.out.println(" ************ XML ****************** ");
-        XmlMapper xmlMapper = new XmlMapper();
-        testSerialization(xmlMapper, "belongNumbers.xml", belongNumbers);
-
-        System.out.println(" ************ Yaml ****************** ");
-        ObjectMapper objectMapperYaml = new ObjectMapper(new YAMLFactory());
-        testSerialization(objectMapperYaml, "belongNumbers.yaml", belongNumbers);
-
-        System.out.println(" ************ Java Serialization ****************** ");
-        try (FileOutputStream fileOutputStream = new FileOutputStream("belongNumbers.bin");
-             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);) {
-            objectOutputStream.writeObject(belongNumbers);
-            objectOutputStream.flush();
-        }
-        System.out.println("After recovery from file");
-        try (FileInputStream fileInputStream = new FileInputStream("belongNumbers.bin");
-             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);) {
-            BelongNumbers persListNew = (BelongNumbers) objectInputStream.readObject();
-            System.out.println("belongNumbersNew = " + persListNew);
-        }
+        return sms;
     }
 
-    public static void testSerialization(ObjectMapper objectMapper, String path, Object object) {
+    public static void testSerialization(String type, ObjectMapper objectMapper, String path, Object object) {
+        System.out.println(" ************ "+ type+" ****************** ");
         System.out.println("Init");
         // Write object to Console
         System.out.println(ObjectSerializer.writeValueAsString(objectMapper, object));
