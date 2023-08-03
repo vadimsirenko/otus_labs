@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Получение наличных</title>
+</head>
+<body>
+<table th:if="${bundles !=null}" >
+    <tr>
+        <th>Банкнота</th>
+        <th>Количество</th>
+    </tr>
+    <tr th:each="person : ${bundles}">
+        <td th:text="${bundle.getBanknote()}">banknote</td>
+        <td th:text="${bundle.getBanknoteCount()}">banknoteCount</td>
+    </tr>
+</table>
+
+<br/>
+<a th:href="@{/atm}">Проверить баланс</a>
+<a th:href="@{/atm/put}">Внести наличные</a>
+<a th:href="@{/atm/get}">Снять наличные</a>
+</body>
+</html>

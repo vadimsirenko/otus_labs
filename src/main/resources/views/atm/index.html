@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Получение баланса</title>
+</head>
+<body>
+<form th:method="POST" th:action="@{/atm}" th:object="${request}">
+    <label for="cardNumber" >Номер карты</label>
+    <input type="text" th:field="*{cardNumber}" id="cardNumber"/>
+    <div style="color:red" th:if="${#fields.hasErrors('cardNumber')}" th:errors="*{cardNumber}">Сard Number Error</div>
+    <br />
+    <label for="pinCode" >Пин код</label>
+    <input type="password" th:field="*{pinCode}" id="pinCode"/>
+    <div style="color:red" th:if="${#fields.hasErrors('pinCode')}" th:errors="*{pinCode}">Pin Code Error</div>
+    <br />
+    <label th:if="*{balance!=null}" th:text="*{'Ваш баланс: ' + balance}" >Balance</label>
+    <br />
+    <input type="submit" name="Запросить баланс" value="Запросить баланс">
+</form>
+<br />
+<br />
+<a th:href="@{/atm/get}">Снять наличные</a>
+<a th:href="@{/atm/put}">Внести наличные</a>
+</body>
+</html>
