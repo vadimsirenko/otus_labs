@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Получение наличных</title>
+</head>
+<body>
+<table th:if="${bundles !=null}" >
+    <tr>
+        <th>Банкнота</th>
+        <th>Количество</th>
+    </tr>
+    <tr th:each="bundle : ${bundles}">
+        <td th:text="${bundle.banknote}">banknote</td>
+        <td th:text="${bundle.banknoteCount}">banknoteCount</td>
+    </tr>
+</table>
+<br/>
+<ul>
+    <li><a th:href="@{/atm/get_balance}">Проверить баланс</a></li>
+    <li><a th:href="@{/atm/put_money}">Пополнить баланс</a></li>
+    <li><a th:href="@{/atm/get_money}">Снять наличные</a></li>
+    <li><a th:href="@{/account/change_pin}">Изменить Пин код</a></li>
+    <li><a th:href="@{/}">Список аккаунтов</a></li>
+</ul>
+</body>
+</html>

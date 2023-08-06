@@ -5,7 +5,7 @@
     <title>Получение баланса</title>
 </head>
 <body>
-<form th:method="POST" th:action="@{/atm}" th:object="${request}">
+<form th:method="POST" th:action="@{/atm/get_balance}" th:object="${request}">
     <label for="cardNumber" >Номер карты</label>
     <input type="text" th:field="*{cardNumber}" id="cardNumber"/>
     <div style="color:red" th:if="${#fields.hasErrors('cardNumber')}" th:errors="*{cardNumber}">Сard Number Error</div>
@@ -14,13 +14,14 @@
     <input type="password" th:field="*{pinCode}" id="pinCode"/>
     <div style="color:red" th:if="${#fields.hasErrors('pinCode')}" th:errors="*{pinCode}">Pin Code Error</div>
     <br />
-    <label th:if="*{balance!=null}" th:text="*{'Ваш баланс: ' + balance}" >Balance</label>
-    <br />
     <input type="submit" name="Запросить баланс" value="Запросить баланс">
 </form>
 <br />
-<br />
-<a th:href="@{/atm/get}">Снять наличные</a>
-<a th:href="@{/atm/put}">Внести наличные</a>
+<ul>
+    <li><a th:href="@{/atm/put_money}">Пополнить баланс</a></li>
+    <li><a th:href="@{/atm/get_money}">Снять наличные</a></li>
+    <li><a th:href="@{/account/change_pin}">Изменить Пин код</a></li>
+    <li><a th:href="@{/}">Список аккаунтов</a></li>
+</ul>
 </body>
 </html>

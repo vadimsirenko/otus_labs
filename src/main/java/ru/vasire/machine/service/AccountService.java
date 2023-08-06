@@ -1,12 +1,17 @@
 package ru.vasire.machine.service;
 
 import ru.vasire.machine.model.Account;
+import ru.vasire.machine.model.dto.AccountDetailsData;
 
 import java.math.BigDecimal;
-import java.time.format.DecimalStyle;
+import java.util.List;
 
 public interface AccountService {
-    Account getAccount(String cardNumber, String pinCode);
+
+    Account getAccountByCardNumber(String cardNumber);
+    boolean validatePinCode(Account account, String pinCode);
+    boolean changePinCode(Account account, String newPinCode);
     BigDecimal getBalance(Account account);
-    BigDecimal changeBalance(Account account, BigDecimal delta);
+    void changeBalance(Account account, BigDecimal delta);
+    List<AccountDetailsData> getAccounts();
 }

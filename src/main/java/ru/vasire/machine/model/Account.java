@@ -4,7 +4,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
-
+@Setter
+@Getter
 public class Account {
     private String cardNumber;
     private String pinCode;
@@ -18,8 +19,7 @@ public class Account {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o instanceof Account){
-            if(((Account) o).cardNumber.equals(this.cardNumber) &&
-                    ((Account) o).pinCode.equals(this.pinCode)){
+            if(((Account)o).cardNumber.equals(this.cardNumber)){
                 return true;
             }
         }
@@ -28,24 +28,6 @@ public class Account {
 
     @Override
     public int hashCode() {
-        int result = cardNumber != null ? cardNumber.hashCode() : 0;
-        result = 31 * result + (pinCode != null ? pinCode.hashCode() : 0);
-        return result;
-    }
-
-    public String getCardNumber() {
-        return cardNumber;
-    }
-
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
-
-    public String getPinCode() {
-        return pinCode;
-    }
-
-    public void setPinCode(String pinCode) {
-        this.pinCode = pinCode;
+        return cardNumber != null ? cardNumber.hashCode() : 0;
     }
 }

@@ -3,9 +3,12 @@ package ru.vasire.machine.service;
 import org.springframework.stereotype.Service;
 import ru.vasire.machine.exception.InvalidAccountException;
 import ru.vasire.machine.model.Account;
+import ru.vasire.machine.model.dto.AccountDetailsData;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -21,11 +24,14 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public Account getAccount(String cardNumber, String pinCode) {
-        Account account = accountStore.keySet().stream().filter(acc -> acc.equals(new Account(cardNumber, pinCode))).findFirst().orElse(null);
-        if(account==null){
-            throw new InvalidAccountException("Invalid card number or PIN code");
-        }
+    public boolean validatePinCode(Account account, String pinCode) {
+        if(!account.getPinCode().equals(pinCode))
+            return false;
+        return true;
+    }
+    @Override
+    public Account getAccountByCardNumber(String cardNumber) {
+        Account account = accountStore.keySet().stream().filter(acc -> acc.equals(new Account(cardNumber,""))).findFirst().orElse(null);
         return account;
     }
 
@@ -39,12 +45,33 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public BigDecimal changeBalance(Account account, BigDecimal delta) {
+    public void changeBalance(Account account, BigDecimal delta) {
         BigDecimal balance = accountStore.get(account);
         if(balance==null){
             throw new InvalidAccountException("Invalid account");
         }
         accountStore.put(account, balance.add(delta));
-        return accountStore.get(account);
+    }
+
+    @Override
+    public List<AccountDetailsData> getAccounts() {
+        List<AccountDetailsData> accountDetailsDataList = new ArrayList<>(accountStore.size());
+        for(Map.Entry<Account, BigDecimal> accountSet: accountStore.entrySet()){
+            accountDetailsDataList.add(new AccountDetailsData(
+                    accountSet.getKey().getCardNumber(), accountSet.getKey().getPinCode(), accountSet.getValue()));
+        }
+        return accountDetailsDataList;
+    }
+
+    @Override
+    public boolean changePinCode(Account account, String newPinCode) {
+        BigDecimal balance = accountStore.get(account);
+        if(balance==null){
+            throw new InvalidAccountException("Invalid account");
+        }
+        account.setPinCode(newPinCode);
+        accountStore.remove(account);
+        accountStore.put(account, balance);
+        return true;
     }
 }

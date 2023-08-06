@@ -4,7 +4,11 @@ import lombok.NonNull;
 import org.springframework.stereotype.Service;
 import ru.vasire.machine.exception.AcceptingFundsException;
 import ru.vasire.machine.exception.InsufficientFundsException;
-import ru.vasire.machine.model.*;
+import ru.vasire.machine.model.Banknote;
+import ru.vasire.machine.model.BanknoteBundle;
+import ru.vasire.machine.model.BanknoteBundleNominalDescComparator;
+import ru.vasire.machine.model.BanknoteBundleUtils;
+import ru.vasire.machine.model.BanknoteCell;
 
 import java.util.Comparator;
 import java.util.List;

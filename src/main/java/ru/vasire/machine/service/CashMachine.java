@@ -1,8 +1,8 @@
 package ru.vasire.machine.service;
 
-import ru.vasire.machine.model.Banknote;
 import ru.vasire.machine.exception.AcceptingFundsException;
 import ru.vasire.machine.exception.InsufficientFundsException;
+import ru.vasire.machine.model.Banknote;
 
 import java.util.List;
 

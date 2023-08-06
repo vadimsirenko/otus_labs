@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменение Пин кода</title>
+</head>
+<body>
+<form th:method="PATCH" th:action="@{/account/change_pin}" th:object="${request}">
+    <label for="cardNumber" >Номер карты</label>
+    <input type="text" th:field="*{cardNumber}" id="cardNumber"/>
+    <div style="color:red" th:if="${#fields.hasErrors('cardNumber')}" th:errors="*{cardNumber}">Сard Number Error</div>
+    <br />
+    <label for="pinCode" >Текущий пин код</label>
+    <input type="password" th:field="*{pinCode}" id="pinCode"/>
+    <div style="color:red" th:if="${#fields.hasErrors('pinCode')}" th:errors="*{pinCode}">Pin Code Error</div>
+    <br />
+    <label for="newPinCode" >Новый пин код</label>
+    <input type="password" th:field="*{newPinCode}" id="newPinCode"/>
+    <div style="color:red" th:if="${#fields.hasErrors('newPinCode')}" th:errors="*{newPinCode}">New Pin Code Error</div>
+    <br />
+    <label for="newPinCode2" >Новый пин код (повторно)</label>
+    <input type="password" th:field="*{newPinCode2}" id="newPinCode2"/>
+    <div style="color:red" th:if="${#fields.hasErrors('newPinCode2')}" th:errors="*{newPinCode2}">New Pin Code 2 Error</div>
+    <br />
+    <input type="submit" name="Изменить" value="Изменить">
+</form>
+<br />
+<ul>
+    <li><a th:href="@{/atm/put_money}">Пополнить баланс</a></li>
+    <li><a th:href="@{/atm/get_money}">Снять наличные</a></li>
+    <li><a th:href="@{/}">Список аккаунтов</a></li>
+</ul>
+</body>
+</html>

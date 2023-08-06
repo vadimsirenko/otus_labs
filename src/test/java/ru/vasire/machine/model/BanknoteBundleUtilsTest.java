@@ -14,11 +14,18 @@ class BanknoteBundleUtilsTest {
     private List<BanknoteBundle> banknoteBundleOne;
     private List<BanknoteBundle> banknoteBundleAll;
 
+    private List<BanknoteCell> banknoteCellAll;
+
     @BeforeEach
     void setUp() {
-        banknoteBundleOne = Arrays.asList(new BanknoteBundle(Banknote.N100, 100), new BanknoteCell(Banknote.N500, 500));
-        banknoteBundleAll = Arrays.asList(new BanknoteBundle(Banknote.N100, 100), new BanknoteCell(Banknote.N500, 500),
+        banknoteBundleOne = Arrays.asList(new BanknoteBundle(Banknote.N100, 100), new BanknoteBundle(Banknote.N500, 500));
+        banknoteBundleAll = Arrays.asList(new BanknoteBundle(Banknote.N100, 100), new BanknoteBundle(Banknote.N500, 500),
                 new BanknoteBundle(Banknote.N1000, 1000), new BanknoteBundle(Banknote.N5000, 5000));
+        banknoteCellAll = Arrays.asList(
+                new BanknoteCell(Banknote.N100, 5),
+                new BanknoteCell(Banknote.N500, 5),
+                new BanknoteCell(Banknote.N1000, 5),
+                new BanknoteCell(Banknote.N5000, 5));
     }
 
     @Test
@@ -43,6 +50,14 @@ class BanknoteBundleUtilsTest {
         assertEquals(2, banknoteBundles.get().size());
         assertEquals(true, banknoteBundles.get().contains(Banknote.N100));
         assertEquals(true, banknoteBundles.get().contains(Banknote.N5000));
+    }
+
+    @Test
+    void calculationBanknoteSetRightBanknoteCell() {
+        Optional<List<Banknote>> banknoteBundles = BanknoteBundleUtils.calculationBanknoteSet(3400, banknoteCellAll, new BanknoteBundleNominalDescComparator());
+        assertEquals(true, banknoteBundles.isPresent());
+        assertEquals(3, banknoteBundles.get().stream().filter(b->b==Banknote.N1000).count());
+        assertEquals(4, banknoteBundles.get().stream().filter(b->b==Banknote.N100).count());
     }
 
     @Test

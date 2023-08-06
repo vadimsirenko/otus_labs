@@ -2,23 +2,30 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Получение наличных</title>
+    <title>Получение баланса</title>
 </head>
 <body>
-<table th:if="${bundles !=null}" >
-    <tr>
-        <th>Банкнота</th>
-        <th>Количество</th>
-    </tr>
-    <tr th:each="person : ${bundles}">
-        <td th:text="${bundle.getBanknote()}">banknote</td>
-        <td th:text="${bundle.getBanknoteCount()}">banknoteCount</td>
-    </tr>
-</table>
-
+<form th:method="POST" th:action="@{/atm/get_money}" th:object="${request}">
+    <label for="cardNumber">Номер карты</label>
+    <input type="text" th:field="*{cardNumber}" id="cardNumber"/>
+    <div style="color:red" th:if="${#fields.hasErrors('cardNumber')}" th:errors="*{cardNumber}">Сard Number Error</div>
+    <br/>
+    <label for="pinCode">Пин-код</label>
+    <input type="password" th:field="*{pinCode}" id="pinCode"/>
+    <div style="color:red" th:if="${#fields.hasErrors('pinCode')}" th:errors="*{pinCode}">Pin Code Error</div>
+    <br/>
+    <label for="sum">Запрашиваемая сумма</label>
+    <input type="number" th:field="*{sum}" id="sum"/>
+    <div style="color:red" th:if="${#fields.hasErrors('sum')}" th:errors="*{sum}">Sum Error</div>
+    <br/>
+    <input type="submit" name="Снять наличные" value="Снять наличные">
+</form>
 <br/>
-<a th:href="@{/atm}">Проверить баланс</a>
-<a th:href="@{/atm/put}">Внести наличные</a>
-<a th:href="@{/atm/get}">Снять наличные</a>
+<ul>
+    <li><a th:href="@{/atm/get_balance}">Проверить баланс</a></li>
+    <li><a th:href="@{/atm/put_money}">Пополнить баланс</a></li>
+    <li><a th:href="@{/account/change_pin}">Изменить Пин код</a></li>
+    <li><a th:href="@{/}">Список аккаунтов</a></li>
+</ul>
 </body>
 </html>

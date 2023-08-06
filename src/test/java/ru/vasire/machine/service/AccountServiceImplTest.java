@@ -20,17 +20,17 @@ class AccountServiceImplTest {
     }
 
     @Test
-    void getAccountRightParams() {
+    void getAccountByCardNumberRightParams() {
         Account expectedAccount = new Account("12345", "1234");
-        Account testAccount = service.getAccount(expectedAccount.getCardNumber(), expectedAccount.getPinCode());
+        Account testAccount = service.getAccountByCardNumber(expectedAccount.getCardNumber());
 
         assertEquals(expectedAccount, testAccount);
     }
 
     @Test
-    void getAccountWithAnError() {
+    void getAccountByCardNumberWithAnError() {
         InvalidAccountException exception = assertThrows(InvalidAccountException.class, () -> {
-            service.getAccount("12345", "1234!");
+            service.getAccountByCardNumber("12345!");
         });
         assertEquals("Invalid card number or PIN code", exception.getMessage());
     }
@@ -63,7 +63,9 @@ class AccountServiceImplTest {
         BigDecimal initBalance = service.getBalance(testAccount);
         BigDecimal expectedBalance = initBalance.add(deltaBalance);
 
-        BigDecimal testBalance = service.changeBalance(testAccount, deltaBalance);
+        service.changeBalance(testAccount, deltaBalance);
+
+        BigDecimal testBalance = service.getBalance(testAccount);
 
         assertEquals(expectedBalance, testBalance);
 
@@ -81,7 +83,9 @@ class AccountServiceImplTest {
         BigDecimal initBalance = service.getBalance(testAccount);
         BigDecimal expectedBalance = initBalance.add(deltaBalance);
 
-        BigDecimal testBalance = service.changeBalance(testAccount, deltaBalance);
+        service.changeBalance(testAccount, deltaBalance);
+
+        BigDecimal testBalance = service.getBalance(testAccount);
 
         assertEquals(expectedBalance, testBalance);
 
