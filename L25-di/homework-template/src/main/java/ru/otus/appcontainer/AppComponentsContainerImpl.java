@@ -13,32 +13,36 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     private final List<Object> appComponents = new ArrayList<>();
     private final Map<String, Object> appComponentsByName = new HashMap<>();
 
-    public AppComponentsContainerImpl(Class<?> initialConfigClass) {
+    public AppComponentsContainerImpl(Class<?>... initialConfigClass) {
         processConfig(initialConfigClass);
     }
 
-    private void processConfig(Class<?> configClass) {
-        checkConfigClass(configClass);
-        // You code here...
-        Object confifInstanse = getConfigClassInstanse(configClass);
+    private void processConfig(Class<?>... configClasses) {
 
-        List<BeanDescription> beanDescriptionList = getBeanDescriptions(configClass);
+        List<BeanDescription> beanDescriptionList = new ArrayList<>();
 
+        for (Class<?> configClass: configClasses) {
+            checkConfigClass(configClass);
+            // You code here...
+            Object configClassInstanseInstanse = getConfigClassInstanse(configClass);
+
+            getBeanDescriptions(beanDescriptionList, configClass, configClassInstanseInstanse);
+        }
         reorderBuildbeanDescriptionList(beanDescriptionList);
 
-        collectCongigurationLists(confifInstanse, beanDescriptionList);
+        collectCongigurationLists(beanDescriptionList);
     }
 
     private void reorderBuildbeanDescriptionList(List<BeanDescription> beanDescriptionList) {
         Collections.sort(beanDescriptionList);
     }
 
-    private void collectCongigurationLists(Object confifInstanse, List<BeanDescription> beanDescriptionList) {
+    private void collectCongigurationLists(List<BeanDescription> beanDescriptionList) {
         for (BeanDescription beanDescription: beanDescriptionList) {
             Object component = null;
             try {
                 var params = Arrays.stream(beanDescription.method.getParameterTypes()).map(pt->getAppComponent(pt)).toArray();
-                component = beanDescription.method.invoke(confifInstanse,  params);
+                component = beanDescription.method.invoke(beanDescription.configObject,  params);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             } catch (InvocationTargetException e) {
@@ -63,12 +67,12 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         return confifInstanse;
     }
 
-    private List<BeanDescription> getBeanDescriptions(Class<?> configClass) {
-        List<BeanDescription> beanDescriptionList = new ArrayList<>();
+    private List<BeanDescription> getBeanDescriptions(List<BeanDescription> beanDescriptionList, Class<?> configClass, Object configClassInstanseInstanse) {
+
         for(Method method: configClass.getDeclaredMethods()){
             if(method.isAnnotationPresent(AppComponent.class)){
                 var annotation = method.getAnnotation(AppComponent.class);
-                beanDescriptionList.add(new BeanDescription(annotation.order(), annotation.name(), method));
+                beanDescriptionList.add(new BeanDescription(annotation.order(), annotation.name(), method, configClassInstanseInstanse));
             }
         }
         return beanDescriptionList;
@@ -95,10 +99,13 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         String name;
         Method method;
 
-        public BeanDescription(int order, String name, Method method) {
+        Object configObject;
+
+        public BeanDescription(int order, String name, Method method, Object configObject) {
             this.order = order;
             this.name = name;
             this.method = method;
+            this.configObject = configObject;
         }
 
         @Override
