@@ -1,18 +1,18 @@
 package ru.vasire.machine.service;
 
 import ru.vasire.machine.model.BanknoteBundle;
-import ru.vasire.machine.model.dto.AccountData;
-import ru.vasire.machine.model.dto.AtmBanknoteData;
-import ru.vasire.machine.model.dto.AtmMoneyData;
+import ru.vasire.machine.model.dto.AtmBanknoteDto;
+import ru.vasire.machine.model.dto.AtmMoneyDto;
+import ru.vasire.machine.model.dto.CardDto;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public interface AtmService {
 
-    public BigDecimal getBalance(AccountData accountData);
+    public BigDecimal getBalance(CardDto cardDto);
 
-    List<BanknoteBundle> getMoney(AtmMoneyData atmMoneyData);
+    List<BanknoteBundle> getMoney(AtmMoneyDto atmMoneyData);
 
-    public BigDecimal putMoney(AtmBanknoteData atmBanknoteData);
+    public BigDecimal putMoney(AtmBanknoteDto atmBanknoteData);
 }

@@ -5,33 +5,35 @@
     <title>Пополнение баланса</title>
 </head>
 <body>
-<form th:method="POST" th:action="@{/atm/put_money}" th:object="${request}">
+<form th:action="@{/atm/put_money}" th:method="POST" th:object="${request}">
     <label for="cardNumber">Номер карты</label>
-    <input type="text" th:field="*{cardNumber}" id="cardNumber"/>
-    <div style="color:red" th:if="${#fields.hasErrors('cardNumber')}" th:errors="*{cardNumber}">Сard Number Error</div>
+    <input id="cardNumber" th:field="*{cardNumber}" type="text"/>
+    <div style="color:red" th:errors="*{cardNumber}" th:if="${#fields.hasErrors('cardNumber')}">Сard Number Error</div>
     <br/>
     <label for="pinCode">Пин-код</label>
-    <input type="password" th:field="*{pinCode}" id="pinCode"/>
-    <div style="color:red" th:if="${#fields.hasErrors('pinCode')}" th:errors="*{pinCode}">Pin Code Error</div>
+    <input id="pinCode" th:field="*{pinCode}" type="password"/>
+    <div style="color:red" th:errors="*{pinCode}" th:if="${#fields.hasErrors('pinCode')}">Pin Code Error</div>
     <br/>
     <label for="banknote">Банкнота</label>
-    <select th:field="*{banknote}" id="banknote" >
-        <option th:each="i : ${banknoteKind}" th:value="${i}" th:text="${i}">
+    <select id="banknote" th:field="*{banknote}">
+        <option th:each="i : ${banknoteKind}" th:text="${i}" th:value="${i}">
         </option>
     </select>
-    <div style="color:red" th:if="${#fields.hasErrors('banknote')}" th:errors="*{banknote}">Banknote Error</div>
+    <div style="color:red" th:errors="*{banknote}" th:if="${#fields.hasErrors('banknote')}">Banknote Error</div>
     <br/>
     <label for="banknoteCount">Количество банкнот</label>
-    <input type="number" th:field="*{banknoteCount}" id="banknoteCount"/>
-    <div style="color:red" th:if="${#fields.hasErrors('banknoteCount')}" th:errors="*{banknoteCount}">Banknote Count Error</div>
+    <input id="banknoteCount" th:field="*{banknoteCount}" type="number"/>
+    <div style="color:red" th:errors="*{banknoteCount}" th:if="${#fields.hasErrors('banknoteCount')}">Banknote Count
+        Error
+    </div>
     <br/>
-    <input type="submit" name="Пополнить баланс" value="Пополнить баланс">
+    <input name="Пополнить баланс" type="submit" value="Пополнить баланс">
 </form>
 <br/>
 <ul>
     <li><a th:href="@{/atm/get_balance}">Проверить баланс</a></li>
     <li><a th:href="@{/atm/get_money}">Снять наличные</a></li>
-    <li><a th:href="@{/account/change_pin}">Изменить Пин код</a></li>
+    <li><a th:href="@{/card/change_pin}">Изменить Пин код</a></li>
     <li><a th:href="@{/}">Список аккаунтов</a></li>
 </ul>
 </body>

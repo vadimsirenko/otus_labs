@@ -7,7 +7,7 @@ public class BanknoteBundle {
     private int banknoteCount;
 
     /**
-     * A cell with banknotes of the same denomination
+     * Represents the set of banknotes of the same denomination
      *
      * @param banknote      denomination of banknotes
      * @param banknoteCount The number of banknotes

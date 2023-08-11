@@ -6,9 +6,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AccountData {
+public class CardDto {
     @NotEmpty(message = "The card number field cannot be empty")
     private String cardNumber;
+
     @NotEmpty(message = "The pin Code field cannot be empty")
     private String pinCode;
 }

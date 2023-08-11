@@ -9,8 +9,11 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @AllArgsConstructor
-public class AccountDetailsData {
+public class CardDetailsDto {
+    private String accuntNumber;
+
     private String cardNumber;
+
     private String pinCode;
 
     private BigDecimal balance;

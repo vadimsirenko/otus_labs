@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class AtmMoneyData extends AccountData {
+public class AtmMoneyDto extends CardDto {
     @NotEmpty(message = "Requested amount cannot be empty")
     @Positive(message = "The sum must be positive")
     private int sum;

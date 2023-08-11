@@ -5,7 +5,7 @@
     <title>Получение наличных</title>
 </head>
 <body>
-<table th:if="${bundles !=null}" >
+<table th:if="${bundles !=null}">
     <tr>
         <th>Банкнота</th>
         <th>Количество</th>
@@ -20,7 +20,7 @@
     <li><a th:href="@{/atm/get_balance}">Проверить баланс</a></li>
     <li><a th:href="@{/atm/put_money}">Пополнить баланс</a></li>
     <li><a th:href="@{/atm/get_money}">Снять наличные</a></li>
-    <li><a th:href="@{/account/change_pin}">Изменить Пин код</a></li>
+    <li><a th:href="@{/card/change_pin}">Изменить Пин код</a></li>
     <li><a th:href="@{/}">Список аккаунтов</a></li>
 </ul>
 </body>

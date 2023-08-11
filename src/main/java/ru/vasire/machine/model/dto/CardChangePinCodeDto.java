@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AccountChangePinCodeData extends AccountData{
+public class CardChangePinCodeDto extends CardDto {
     @NotEmpty(message = "The new pin Code field cannot be empty")
     private String newPinCode;
 

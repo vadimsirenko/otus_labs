@@ -7,14 +7,16 @@
 <body>
 <table>
     <tr>
+        <th>Account Number</th>
         <th>Card Number</th>
         <th>Pin Code</th>
         <th>Balance</th>
     </tr>
-    <tr th:each="account : ${accounts}">
-        <td th:text="${account.cardNumber}">banknote</td>
-        <td th:text="${account.pinCode}">banknoteCount</td>
-        <td th:text="${account.balance}">banknoteCount</td>
+    <tr th:each="card : ${cards}">
+        <td th:text="${card.accuntNumber}">banknote</td>
+        <td th:text="${card.cardNumber}">banknote</td>
+        <td th:text="${card.pinCode}">banknoteCount</td>
+        <td th:text="${card.balance}">banknoteCount</td>
     </tr>
 </table>
 <br/>
@@ -22,11 +24,7 @@
     <li><a th:href="@{/atm/get_balance}">Проверить баланс</a></li>
     <li><a th:href="@{/atm/put_money}">Пополнить баланс</a></li>
     <li><a th:href="@{/atm/get_money}">Снять наличные</a></li>
-    <li><a th:href="@{/account/change_pin}">Изменить Пин код</a></li>
+    <li><a th:href="@{/card/change_pin}">Изменить Пин код</a></li>
 </ul>
-
-
-
-
 </body>
 </html>

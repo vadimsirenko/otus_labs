@@ -12,7 +12,7 @@ import ru.vasire.machine.model.Banknote;
 @AllArgsConstructor
 @Getter
 @Setter
-public class AtmBanknoteData  extends AccountData {
+public class AtmBanknoteDto extends CardDto {
     @NotEmpty(message = "Banknote count cannot be empty")
     @Positive(message = "The banknote count must be positive")
     private int banknoteCount;

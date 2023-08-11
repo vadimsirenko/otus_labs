@@ -42,7 +42,7 @@ public enum Banknote implements Comparable<Banknote> {
     }
 
     /**
-     * Returns the closest number of banknotes of the current denomination, but not more than the specified amount
+     * Returns the closest number of banknotes less or equals specified amount
      *
      * @param sum requested amount
      * @return number of banknotes

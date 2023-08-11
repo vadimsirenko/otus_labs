@@ -2,19 +2,19 @@ package ru.vasire.machine.util;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import ru.vasire.machine.model.dto.AccountData;
-import ru.vasire.machine.service.AccountService;
+import ru.vasire.machine.model.dto.CardDto;
+import ru.vasire.machine.service.CardService;
 
 @Component
-public class AccountDataValidator extends AccountDataBaseValidator<AccountData> {
+public class CardValidator extends CardBaseValidator<CardDto> {
 
-    public AccountDataValidator(AccountService accountService) {
-        super(accountService);
+    public CardValidator(CardService cardService) {
+        super(cardService);
     }
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return AccountData.class.equals(clazz);
+        return CardDto.class.equals(clazz);
     }
 
     @Override

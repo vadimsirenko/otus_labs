@@ -2,31 +2,30 @@ package ru.vasire.machine.util;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import ru.vasire.machine.model.Account;
-import ru.vasire.machine.model.dto.AtmMoneyData;
-import ru.vasire.machine.service.AccountService;
+import ru.vasire.machine.model.dto.AtmMoneyDto;
+import ru.vasire.machine.service.CardService;
 
 @Component
-public class AtmMoneyDataValidator extends AccountDataBaseValidator<AtmMoneyData> {
+public class AtmMoneyValidator extends CardBaseValidator<AtmMoneyDto> {
 
-    public AtmMoneyDataValidator(AccountService accountService) {
-        super(accountService);
+    public AtmMoneyValidator(CardService cardService) {
+        super(cardService);
     }
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return AtmMoneyData.class.equals(clazz);
+        return AtmMoneyDto.class.equals(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        AtmMoneyData atmGetMoneyRequest = (AtmMoneyData) target;
+        AtmMoneyDto atmGetMoneyRequest = (AtmMoneyDto) target;
         super.validate(target, errors);
 
         if (errors.getErrorCount() > 0)
             return;
         try {
-            Integer balance = accountService.getBalance(new Account(atmGetMoneyRequest.getCardNumber(), atmGetMoneyRequest.getPinCode())).intValue();
+            Integer balance = cardService.getBalance(atmGetMoneyRequest.getCardNumber(), atmGetMoneyRequest.getPinCode()).intValue();
             if (atmGetMoneyRequest.getSum() > balance) {
                 errors.rejectValue("sum", null, "Requested amount exceeds balance");
                 return;
