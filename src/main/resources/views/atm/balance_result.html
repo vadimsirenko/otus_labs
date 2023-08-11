@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Пополнение баланса</title>
+</head>
+<body>
+<label th:if="*{balance!=null}" th:text="*{'Ваш баланс: ' + balance}">Balance</label>
+<br/>
+<ul>
+    <li><a th:href="@{/atm/get_balance}">Проверить баланс</a></li>
+    <li><a th:href="@{/atm/put_money}">Пополнить баланс</a></li>
+    <li><a th:href="@{/atm/get_money}">Снять наличные</a></li>
+    <li><a th:href="@{/card/change_pin}">Изменить Пин код</a></li>
+    <li><a th:href="@{/}">Список аккаунтов</a></li>
+</ul>
+</body>
+</html>

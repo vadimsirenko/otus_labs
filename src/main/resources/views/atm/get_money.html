@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Получение баланса</title>
+</head>
+<body>
+<form th:action="@{/atm/get_money}" th:method="POST" th:object="${request}">
+    <label for="cardNumber">Номер карты</label>
+    <input id="cardNumber" th:field="*{cardNumber}" type="text"/>
+    <div style="color:red" th:errors="*{cardNumber}" th:if="${#fields.hasErrors('cardNumber')}">Сard Number Error</div>
+    <br/>
+    <label for="pinCode">Пин-код</label>
+    <input id="pinCode" th:field="*{pinCode}" type="password"/>
+    <div style="color:red" th:errors="*{pinCode}" th:if="${#fields.hasErrors('pinCode')}">Pin Code Error</div>
+    <br/>
+    <label for="sum">Запрашиваемая сумма</label>
+    <input id="sum" th:field="*{sum}" type="number"/>
+    <div style="color:red" th:errors="*{sum}" th:if="${#fields.hasErrors('sum')}">Sum Error</div>
+    <br/>
+    <input name="Снять наличные" type="submit" value="Снять наличные">
+</form>
+<br/>
+<ul>
+    <li><a th:href="@{/atm/get_balance}">Проверить баланс</a></li>
+    <li><a th:href="@{/atm/put_money}">Пополнить баланс</a></li>
+    <li><a th:href="@{/card/change_pin}">Изменить Пин код</a></li>
+    <li><a th:href="@{/}">Список аккаунтов</a></li>
+</ul>
+</body>
+</html>
