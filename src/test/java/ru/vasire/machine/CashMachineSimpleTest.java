@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,11 +16,11 @@ class CashMachineSimpleTest {
     @BeforeEach
     void init() {
 
-        cashMachine = new CashMachineSimple(Arrays.asList(
+        cashMachine = new CashMachineSimple(new HashSet<BanknoteCell>(Arrays.asList(
                 new BanknoteCell(Banknote.N100, 5),
                 new BanknoteCell(Banknote.N500, 5),
                 new BanknoteCell(Banknote.N1000, 5),
-                new BanknoteCell(Banknote.N5000, 5)));
+                new BanknoteCell(Banknote.N5000, 5))));
     }
 
     @Test
@@ -63,10 +64,10 @@ class CashMachineSimpleTest {
 
     @Test
     void putMoneyWithAcceptingFundsException() {
-        cashMachine = new CashMachineSimple(Arrays.asList(
+        cashMachine = new CashMachineSimple(new HashSet<BanknoteCell>(Arrays.asList(
                 new BanknoteCell(Banknote.N100, 5),
                 new BanknoteCell(Banknote.N1000, 5),
-                new BanknoteCell(Banknote.N5000, 5)));
+                new BanknoteCell(Banknote.N5000, 5))));
 
         List<Banknote> putBanknotes = List.of(Banknote.N100, Banknote.N500, Banknote.N1000, Banknote.N5000);
         int initSum = cashMachine.getBalance();
