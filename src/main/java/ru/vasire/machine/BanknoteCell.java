@@ -33,6 +33,7 @@ public class BanknoteCell implements Comparable<BanknoteCell> {
     public int getBalance() {
         return banknote.getAmountOfNumberBanknote(banknoteCount);
     }
+
     public void removeBanknotes(int num) {
         if (num > getBanknoteCount()) {
             throw new InsufficientFundsException("The requested number of banknotes is greater than the balance");
@@ -47,7 +48,7 @@ public class BanknoteCell implements Comparable<BanknoteCell> {
         setBanknoteCount(getBanknoteCount() + num);
     }
 
-    public int getMoneyCount(int requereSum){
+    public int getMoneyCount(int requereSum) {
         return Math.min(getBanknote().MaxBanknoteCountLessOrEqToSum(requereSum), getBanknoteCount());
     }
 
@@ -58,10 +59,9 @@ public class BanknoteCell implements Comparable<BanknoteCell> {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof BanknoteCell) {
+        if (obj instanceof BanknoteCell) {
             return this.getBanknote().equals(((BanknoteCell) obj).getBanknote());
-        }
-        else{
+        } else {
             return false;
         }
     }

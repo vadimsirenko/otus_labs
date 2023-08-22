@@ -21,7 +21,7 @@ public class CashMachineSimple implements CashMachine {
      * @param banknoteCells Cells with banknotes. Cell values must be unique.
      */
     public CashMachineSimple(@NonNull Set<BanknoteCell> banknoteCells) {
-        moneyCells = new TreeSet<>();//new BanknoteBundleNominalDescComparator());
+        moneyCells = new TreeSet<>();
         moneyCells.addAll(banknoteCells);
     }
 
@@ -50,15 +50,15 @@ public class CashMachineSimple implements CashMachine {
         List<Banknote> money = new ArrayList<>();
         Map<Banknote, Integer> moneyToRemoveFromATM = new HashMap<>();
         int banknoteCount;
-        for(BanknoteCell bc: moneyCells){
+        for (BanknoteCell bc : moneyCells) {
             banknoteCount = bc.getMoneyCount(requereSum);
             money.addAll(Collections.nCopies(banknoteCount, bc.getBanknote()));
             moneyToRemoveFromATM.put(bc.getBanknote(), banknoteCount);
             requereSum = requereSum - bc.getBanknote().getAmountOfNumberBanknote(banknoteCount);
         }
-        if(requereSum == 0){
+        if (requereSum == 0) {
             moneyCells.forEach(banknoteCell -> {
-                if(moneyToRemoveFromATM.get(banknoteCell.getBanknote()) != 0){
+                if (moneyToRemoveFromATM.get(banknoteCell.getBanknote()) != 0) {
                     banknoteCell.removeBanknotes(moneyToRemoveFromATM.get(banknoteCell.getBanknote()));
                 }
             });
@@ -75,9 +75,9 @@ public class CashMachineSimple implements CashMachine {
      */
     @Override
     public void putMoney(@NonNull List<Banknote> banknotes) {
-        if(banknotes.stream().anyMatch(b -> moneyCells.stream().noneMatch(bc -> bc.getBanknote().equals(b)))){
+        if (banknotes.stream().anyMatch(b -> moneyCells.stream().noneMatch(bc -> bc.getBanknote().equals(b)))) {
             throw new AcceptingFundsException("Unable to accept banknote");
         }
-        moneyCells.forEach(bc-> bc.addBanknotes((int) banknotes.stream().filter(b->b.equals(bc.getBanknote())).count()) );
+        moneyCells.forEach(bc -> bc.addBanknotes((int) banknotes.stream().filter(b -> b.equals(bc.getBanknote())).count()));
     }
 }
