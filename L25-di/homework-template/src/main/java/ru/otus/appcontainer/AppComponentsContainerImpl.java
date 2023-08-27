@@ -101,7 +101,7 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         if (cmpList.size() == 0) {
             throw new RuntimeException(String.format("Bean %s is not registered", componentClass.getName()));
         }
-        return (C) appComponents.stream().filter(c -> componentClass.isInstance(c)).findFirst().orElse(null);
+        return cmpList.get(0);
     }
 
     @Override
