@@ -3,28 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Получение наличных</title>
+    <link rel="stylesheet" th:href="@{/styles/main.css}"/>
 </head>
 <body>
-<table>
-    <tr>
-        <th>Account Number</th>
-        <th>Card Number</th>
-        <th>Pin Code</th>
-        <th>Balance</th>
-    </tr>
-    <tr th:each="card : ${cards}">
-        <td th:text="${card.accuntNumber}">banknote</td>
-        <td th:text="${card.cardNumber}">banknote</td>
-        <td th:text="${card.pinCode}">banknoteCount</td>
-        <td th:text="${card.balance}">banknoteCount</td>
-    </tr>
-</table>
-<br/>
-<ul>
-    <li><a th:href="@{/atm/get_balance}">Проверить баланс</a></li>
-    <li><a th:href="@{/atm/put_money}">Пополнить баланс</a></li>
-    <li><a th:href="@{/atm/get_money}">Снять наличные</a></li>
-    <li><a th:href="@{/card/change_pin}">Изменить Пин код</a></li>
-</ul>
+<h3>Список аккаунтов</h3>
+<div class="form">
+    <table>
+        <tr>
+            <th>Account Number</th>
+            <th>Card Number</th>
+            <th>Pin-Code</th>
+            <th>Balance</th>
+        </tr>
+        <tr th:each="card : ${cards}">
+            <td th:text="${card.accuntNumber}">banknote</td>
+            <td th:text="${card.cardNumber}">banknote</td>
+            <td th:text="${card.pinCode}">banknoteCount</td>
+            <td th:text="${card.balance}">banknoteCount</td>
+        </tr>
+    </table>
+    <ul>
+        <li><a th:href="@{/atm/get_balance}">Проверить баланс</a></li>
+        <li><a th:href="@{/atm/put_money}">Пополнить баланс</a></li>
+        <li><a th:href="@{/atm/get_money}">Снять наличные</a></li>
+        <li><a th:href="@{/card/change_pin}">Изменить Пин код</a></li>
+    </ul>
+</div>
 </body>
 </html>

@@ -1,0 +1,107 @@
+body{
+    background-color: lightcyan;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+h3{
+    text-align: center;
+}
+
+ul{
+    margin-top: 20px;
+}
+
+li{
+	color: black;
+	font-size: 18px;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:active {
+  text-decoration: underline;
+}
+
+div.form {
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 15px;"
+}
+
+/* 1 – Изменим стили шрифтов */
+/* 2 – Удалим margin в Firefox и Safari */
+input[type="text"], select {
+  font-family: inherit; /* 1 */
+  font-size: inherit; /* 1 */
+  line-height: inherit; /* 1 */
+  margin: 0; /* 2 */
+}
+
+/* установим отступ 1rem от нижнего края элемента */
+.text-field {
+  margin-bottom: 1rem;
+}
+/* стили для label */
+label {
+  display: block;
+  margin-bottom: 0.25rem;
+  margin-top: 10px;
+}
+/* стили для input */
+input, select {
+  display: block;
+  width: 100%;
+  height: calc(2.25rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+/* стили для button */
+button {
+  appearance: none;
+  border: 0;
+  border-radius: 5px;
+  background: #6781b5;
+  color: #fff;
+  padding: 8px 16px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+table {
+	width: 100%;
+	margin-bottom: 20px;
+	border: 1px solid #dddddd;
+	border-collapse: collapse;
+}
+table th {
+	font-weight: bold;
+	padding: 5px;
+	background: #efefef;
+	border: 1px solid #dddddd;
+}
+table td {
+	border: 1px solid #dddddd;
+	padding: 5px;
+}

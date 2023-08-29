@@ -1,66 +1,55 @@
 package ru.vasire.machine.service;
 
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.vasire.machine.exception.InvalidAccountException;
 import ru.vasire.machine.model.Account;
-import ru.vasire.machine.model.Card;
 import ru.vasire.machine.model.dto.CardDetailsDto;
-import ru.vasire.machine.repository.AccountCardRepository;
+import ru.vasire.machine.repository.AccountRepository;
+import ru.vasire.machine.sessionmanager.TransactionManager;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
+    private static final Logger log = LoggerFactory.getLogger(AccountServiceImpl.class);
 
-    private final AccountCardRepository accountCardRepository;
-
-    public AccountServiceImpl(AccountCardRepository accountCardRepository) {
-        this.accountCardRepository = accountCardRepository;
-
-        Account account = this.accountCardRepository.addAccount("123-456", BigDecimal.valueOf(12345.12));
-        account.addCard("12345", "1234");
-
-        account = this.accountCardRepository.addAccount("234-567", BigDecimal.valueOf(23456.23));
-        account.addCard("23456", "2345");
-
-        account = this.accountCardRepository.addAccount("345-678", BigDecimal.valueOf(34567.34));
-        account.addCard("34567", "3456");
-    }
+    private final TransactionManager transactionManager;
+    private final AccountRepository accountRepository;
 
     @Override
     public Account getAccountByCardNumber(String cardNumber) {
-        return accountCardRepository.getAccountByCardNumber(cardNumber);
+        var accountList = accountRepository.findByCardNumber(cardNumber);
+        if (accountList == null || accountList.size() > 1) {
+            log.error(String.format("More than one account was found for the card %s", cardNumber));
+            throw new InvalidAccountException("Invalid cardNumber");
+        }
+        return accountList.get(0);
     }
 
     @Override
     public BigDecimal getBalanceByCardNumber(String cardNumber) {
-        Account account = accountCardRepository.getAccountByCardNumber(cardNumber);
-        if (account == null) {
-            throw new InvalidAccountException("Invalid account");
-        }
+        Account account = getAccountByCardNumber(cardNumber);
         return account.getBalance();
     }
 
     @Override
     public void changeBalance(String cardNumber, BigDecimal delta) {
-        Account account = accountCardRepository.getAccountByCardNumber(cardNumber);
-        if (account == null) {
-            throw new InvalidAccountException("Invalid account");
-        }
+        Account account = getAccountByCardNumber(cardNumber);
         account.setBalance(account.getBalance().add(delta));
+        transactionManager.doCommandInTransaction(() -> {
+            var savedAccount = accountRepository.save(account);
+            log.info("saved account: {}", savedAccount);
+            return null;
+        });
     }
 
     @Override
     public List<CardDetailsDto> getCardDetails() {
-        List<CardDetailsDto> cardDetailsDataList = new ArrayList<>();
-        for (Account account : accountCardRepository.getAllAccounts()) {
-            for (Card card : account.getCards()) {
-                cardDetailsDataList.add(new CardDetailsDto(
-                        account.getNumber(), card.getNumber(), card.getPinCode(), account.getBalance()));
-            }
-        }
-        return cardDetailsDataList;
+        return accountRepository.findAllAccountCards();
     }
 }

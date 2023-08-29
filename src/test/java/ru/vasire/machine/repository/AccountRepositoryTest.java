@@ -1,4 +1,4 @@
-package ru.vasire.machine.service;
+package ru.vasire.machine.repository;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -16,8 +16,11 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.vasire.Main;
 import ru.vasire.machine.model.Account;
+import ru.vasire.machine.model.Card;
+import ru.vasire.machine.model.dto.CardDetailsDto;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,35 +28,37 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Testcontainers
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(initializers = {AccountServiceImplTest.Initializer.class}, classes = Main.class)
+@ContextConfiguration(initializers = {AccountRepositoryTest.Initializer.class}, classes = Main.class)
 @ActiveProfiles("test")
-class AccountServiceImplTest {
+class AccountRepositoryTest {
     @Container
     public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:13");
     @Autowired
-    AccountService accountService;
+    AccountRepository accountRepository;
 
     @Test
-    void getAccountByCardNumber() {
-        Account account = accountService.getAccountByCardNumber("12345");
-        assertEquals("123-456", account.getNumber());
-    }
-
-    @Test
-    void getBalanceByCardNumber() {
-        Account account = accountService.getAccountByCardNumber("12345");
+    void findByCardNumber() {
+        List<Account> accountList = accountRepository.findByCardNumber("12345");
+        assertEquals(1, accountList.size());
+        Account account = accountList.get(0);
         assertEquals(BigDecimal.valueOf(12345.12), account.getBalance());
+        assertEquals("123-456", account.getNumber());
+        assertEquals(1, account.getCards().size());
+        Card card = account.getCards().stream().findFirst().get();
+        assertEquals("12345", card.getCardNumber());
+        assertEquals("1234", card.getPinCode());
+        assertEquals("123-456", card.getAccountId());
     }
 
     @Test
-    void changeBalance() {
-        accountService.changeBalance("12345", BigDecimal.valueOf(10_000));
-        Account account = accountService.getAccountByCardNumber("12345");
-        assertEquals(BigDecimal.valueOf(22345.12), account.getBalance());
-    }
-
-    @Test
-    void getCardDetails() {
+    void findAllAccountCards() {
+        List<CardDetailsDto> cardDetailsDtoList = accountRepository.findAllAccountCards();
+        assertEquals(3, cardDetailsDtoList.size());
+        CardDetailsDto cardDetailsDto = cardDetailsDtoList.get(0);
+        assertEquals(BigDecimal.valueOf(12345.12), cardDetailsDto.getBalance());
+        assertEquals("123-456", cardDetailsDto.getAccuntNumber());
+        assertEquals("12345", cardDetailsDto.getCardNumber());
+        assertEquals("1234", cardDetailsDto.getPinCode());
     }
 
     static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {

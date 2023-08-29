@@ -2,7 +2,6 @@ package ru.vasire.machine.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.vasire.machine.model.Banknote;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,7 +2,6 @@ package ru.vasire.machine.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.vasire.machine.model.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -56,8 +55,8 @@ class BanknoteBundleUtilsTest {
     void calculationBanknoteSetRightBanknoteCell() {
         Optional<List<Banknote>> banknoteBundles = BanknoteBundleUtils.calculationBanknoteSet(3400, banknoteCellAll, new BanknoteBundleNominalDescComparator());
         assertEquals(true, banknoteBundles.isPresent());
-        assertEquals(3, banknoteBundles.get().stream().filter(b->b==Banknote.N1000).count());
-        assertEquals(4, banknoteBundles.get().stream().filter(b->b==Banknote.N100).count());
+        assertEquals(3, banknoteBundles.get().stream().filter(b -> b == Banknote.N1000).count());
+        assertEquals(4, banknoteBundles.get().stream().filter(b -> b == Banknote.N100).count());
     }
 
     @Test

@@ -1,76 +1,68 @@
 package ru.vasire.machine.service;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.vasire.machine.model.Account;
-import ru.vasire.machine.model.Card;
-import ru.vasire.machine.repository.AccountCardRepository;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import ru.vasire.Main;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest()
+@Testcontainers
+@Transactional
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(initializers = {CardServiceImplTest.Initializer.class}, classes = Main.class)
+@ActiveProfiles("test")
 class CardServiceImplTest {
-    private CardService cardService;
-    private AccountService accountService;
 
-    @BeforeEach
-    void init() {
-        AccountCardRepository accountCardRepository = new AccountCardRepository(new HashSet<>());
-
-        Account account = accountCardRepository.addAccount("123-456", BigDecimal.valueOf(12345.12));
-        account.addCard("12345", "1234");
-
-        account = accountCardRepository.addAccount("234-567", BigDecimal.valueOf(23456.23));
-        account.addCard("23456", "2345");
-
-        account = accountCardRepository.addAccount("345-678", BigDecimal.valueOf(34567.34));
-        account.addCard("34567", "3456");
-
-
-        accountService = new AccountServiceImpl(accountCardRepository);
-        cardService = new CardServiceImpl(accountService, accountCardRepository);
-    }
+    @Container
+    public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:13");
+    @Autowired
+    CardService cardService;
 
     @Test
     void verifyPinCode() {
-        Assertions.assertTrue(cardService.verifyPinCode("12345", "1234"));
-    }
-
-    @Test
-    void verifyWrongPinCode() {
-        Assertions.assertFalse(cardService.verifyPinCode("12345", "1234!"));
+        assertTrue(cardService.verifyPinCode("12345", "1234"));
+        assertFalse(cardService.verifyPinCode("12345", "1234!"));
     }
 
     @Test
     void getBalance() {
-        Assertions.assertEquals(BigDecimal.valueOf(12345.12), cardService.getBalance("12345", "1234"));
+        assertEquals(BigDecimal.valueOf(12345.12), cardService.getBalance("12345", "1234"));
     }
 
     @Test
     void changePinCode() {
-        Assertions.assertTrue(cardService.changePinCode("12345", "1234", "1234!"));
-        Assertions.assertEquals("1234!", ((Card)accountService.getAccountByCardNumber("12345").getCards().stream().toArray()[0]).getPinCode());
+        cardService.changePinCode("12345", "1234", "4321");
+        assertTrue(cardService.verifyPinCode("12345", "4321"));
     }
 
     @Test
     void changeBalance() {
-        String cardNumber = "12345";
-        String pinCode = "1234";
-        BigDecimal deltaBalance = new BigDecimal(25.25);
+        cardService.changeBalance("12345", "1234", BigDecimal.valueOf(10_000));
+        assertEquals(BigDecimal.valueOf(22345.12), cardService.getBalance("12345", "1234"));
+    }
 
-        BigDecimal initBalance = cardService.getBalance(cardNumber, pinCode);
-        BigDecimal expectedBalance = initBalance.add(deltaBalance);
-
-        cardService.changeBalance(cardNumber, pinCode, deltaBalance);
-
-        BigDecimal testBalance = cardService.getBalance(cardNumber, pinCode);
-
-        assertEquals(expectedBalance, testBalance);
-
-        // 12345.12 +25.25 = 12370.37
-        assertEquals(BigDecimal.valueOf(12370.37), testBalance);
+    static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+        public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
+            TestPropertyValues.of(
+                    "spring.datasource.url=" + postgreSQLContainer.getJdbcUrl(),
+                    "spring.datasource.username=" + postgreSQLContainer.getUsername(),
+                    "spring.datasource.password=" + postgreSQLContainer.getPassword()
+            ).applyTo(configurableApplicationContext.getEnvironment());
+        }
     }
 }

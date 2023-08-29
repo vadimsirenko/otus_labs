@@ -1,4 +1,4 @@
-package ru.vasire.machine.service;
+package ru.vasire.machine.repository;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -15,45 +15,40 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.vasire.Main;
-import ru.vasire.machine.model.Account;
+import ru.vasire.machine.model.Card;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest()
 @Testcontainers
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(initializers = {AccountServiceImplTest.Initializer.class}, classes = Main.class)
+@ContextConfiguration(initializers = {CardRepositoryTest.Initializer.class}, classes = Main.class)
 @ActiveProfiles("test")
-class AccountServiceImplTest {
+class CardRepositoryTest {
     @Container
     public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:13");
     @Autowired
-    AccountService accountService;
+    CardRepository cardRepository;
 
     @Test
-    void getAccountByCardNumber() {
-        Account account = accountService.getAccountByCardNumber("12345");
-        assertEquals("123-456", account.getNumber());
+    void updatePinCode() {
+        cardRepository.updatePinCode(1L, "4321");
+        assertEquals("4321", cardRepository.findById(BigInteger.valueOf(1)).get().getPinCode());
     }
 
     @Test
-    void getBalanceByCardNumber() {
-        Account account = accountService.getAccountByCardNumber("12345");
-        assertEquals(BigDecimal.valueOf(12345.12), account.getBalance());
-    }
-
-    @Test
-    void changeBalance() {
-        accountService.changeBalance("12345", BigDecimal.valueOf(10_000));
-        Account account = accountService.getAccountByCardNumber("12345");
-        assertEquals(BigDecimal.valueOf(22345.12), account.getBalance());
-    }
-
-    @Test
-    void getCardDetails() {
+    void findByCardNumber() {
+        Optional<Card> cardOpt = cardRepository.findByCardNumber("12345");
+        assertTrue(cardOpt.isPresent());
+        Card card = cardOpt.get();
+        assertEquals("12345", card.getCardNumber());
+        assertEquals("1234", card.getPinCode());
+        assertEquals("123-456", card.getAccountId());
     }
 
     static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {

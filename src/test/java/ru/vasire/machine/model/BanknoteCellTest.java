@@ -3,8 +3,6 @@ package ru.vasire.machine.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.vasire.machine.exception.InsufficientFundsException;
-import ru.vasire.machine.model.Banknote;
-import ru.vasire.machine.model.BanknoteCell;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
