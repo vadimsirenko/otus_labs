@@ -1,0 +1,13 @@
+{
+  "port": 4444,
+  "mappings": [
+    {
+      "address": "/hello.html",
+      "path": "/static/hello.html"
+    },
+    {
+      "address": "/goodbye.html",
+      "path": "/static/goodbye.html"
+    }
+  ]
+}
