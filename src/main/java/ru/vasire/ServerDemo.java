@@ -14,12 +14,11 @@ public class ServerDemo {
     private static final Logger log = LoggerFactory.getLogger(ServerDemo.class);
 
     public ServerDemo() {
-
+        ExecutorService executorService = Executors.newCachedThreadPool();
         try {
             ServerConfiguration config = ServerConfigurationLoader.load();
             if (config != null && config.getPort() != 0) {
-                try (ServerSocket server = new ServerSocket(config.getPort());
-                     ExecutorService executorService = Executors.newCachedThreadPool()) {
+                try (ServerSocket server = new ServerSocket(config.getPort())) {
                     while (true) {
                         Socket socket = server.accept();
                         executorService.submit(new HttpProcessingTask(socket, config));
@@ -31,6 +30,8 @@ public class ServerDemo {
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);
+        } finally {
+            executorService.shutdown();
         }
     }
 }

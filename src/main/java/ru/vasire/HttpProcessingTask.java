@@ -9,10 +9,16 @@ import ru.vasire.configuration.ServerConfigurationLoader;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class HttpProcessingTask implements Runnable {
     private final Socket socket;
+
+    private static String CONTENT_TYPE_TEXT = "Content-Type: text/html; charset=utf-8";
+    private static String CONTENT_TYPE_JPEG = "image/jpeg";
+
+    private String contentType = CONTENT_TYPE_TEXT;
     private final ServerConfiguration serverConfiguration;
     private static final Logger log = LoggerFactory.getLogger(ServerConfigurationLoader.class);
 
@@ -39,10 +45,10 @@ public class HttpProcessingTask implements Runnable {
         }
     }
 
-    private static void writeResponse(OutputStream output, String status, byte[] content) throws IOException {
+    private void writeResponse(OutputStream output, String status, byte[] content) throws IOException {
         output.write(("HTTP/1.1 " + status).getBytes());
         output.write("\r\n".getBytes());
-        output.write("Content-Type: text/html; charset=utf-8".getBytes());
+        output.write(contentType.getBytes());
         output.write("\r\n".getBytes());
         output.write("\r\n".getBytes());
         output.write(content);
@@ -52,16 +58,28 @@ public class HttpProcessingTask implements Runnable {
     private InputStream findResource(BufferedReader input) throws IOException {
         InputStream resourceStream = null;
         final String address = findAddress(input);
-        if (address != null && address.endsWith(".html")) {
+        if ((address != null) && (address.endsWith(".html") || address.endsWith(".jpg"))) {
             String fileResource = serverConfiguration.getMappings().stream()
                     .filter(m -> m.getAddress().equals(address))
                     .map(ResourceMapping::getPath)
                     .findFirst().orElse(null);
             if (fileResource != null) {
+                setContentType(fileResource);
                 resourceStream = getClass().getResourceAsStream(fileResource);
             }
         }
         return resourceStream;
+    }
+
+    private void setContentType(String fileResource) {
+        Optional<String> extFile = getExtensionByStringHandling(fileResource);
+        if (extFile.isPresent()) {
+            switch (extFile.get()) {
+                case "jpeg" -> contentType = CONTENT_TYPE_JPEG;
+                case "jpg" -> contentType = CONTENT_TYPE_JPEG;
+                default -> contentType = CONTENT_TYPE_TEXT;
+            }
+        }
     }
 
     private static String findAddress(BufferedReader in) throws IOException {
@@ -70,5 +88,11 @@ public class HttpProcessingTask implements Runnable {
             if (s.startsWith("GET")) return s.split(" ")[1];
         }
         return null;
+    }
+
+    public static Optional<String> getExtensionByStringHandling(String filename) {
+        return Optional.ofNullable(filename)
+                .filter(f -> f.contains("."))
+                .map(f -> f.substring(filename.lastIndexOf(".") + 1).toLowerCase());
     }
 }
